@@ -1,9 +1,8 @@
-import java.io.IOException;
 import java.util.Scanner;
 
 public class WeightedAverages {
  
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         int weights[] = new int[]{2, 3, 5};
         int sumOfWeights = 0;

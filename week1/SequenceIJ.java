@@ -1,8 +1,6 @@
-import java.io.IOException;
-
 public class SequenceIJ {
  
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         double i;
         for(i = 0.0; i <= 2; i += 0.2) {
             i = Double.parseDouble(String.format("%.1f", i));

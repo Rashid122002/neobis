@@ -1,9 +1,8 @@
-import java.io.IOException;
 import java.util.Scanner;
 
 public class TriangleTypes {
  
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         double sides[] = new double[3];
         for(int i = 0; i < sides.length; i++) {

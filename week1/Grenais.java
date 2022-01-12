@@ -1,9 +1,8 @@
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Grenais {
  
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         int response, inter, gremio;
         int countGames = 0, interwins = 0, gremiowins = 0, empates = 0;
