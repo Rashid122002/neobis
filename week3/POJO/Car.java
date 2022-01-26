@@ -1,91 +1,111 @@
+import java.util.Date;
+
 public class Car {
-    private Long id;
-    private String manufacturer;
-    private String modelName;
-    private String color;
-    private String transmisson;
-    private String carType;
-    private double price;
+    private long carId;
+    private String carBrand;
+    private String serialNumber;
+    private Date yearOfManufacture;
+    private String engineCapacity;
+    private String carColor;
+    private Price priceId;
+    private String notes;
 
     public Car() {
     }
 
-    public Car(Long id, String manufacturer, String modelName, String color, String transmisson, String carType, double price) {
-        this.id = id;
-        this.manufacturer = manufacturer;
-        this.modelName = modelName;
-        this.color = color;
-        this.transmisson = transmisson;
-        this.carType = carType;
-        this.price = price;
+    public Car(long carId,
+               String carBrand,
+               String serialNumber,
+               Date yearOfManufacture,
+               String engineCapacity,
+               String carColor,
+               Price priceId,
+               String notes) {
+        this.carId = carId;
+        this.carBrand = carBrand;
+        this.serialNumber = serialNumber;
+        this.yearOfManufacture = yearOfManufacture;
+        this.engineCapacity = engineCapacity;
+        this.carColor = carColor;
+        this.priceId = priceId;
+        this.notes = notes;
     }
 
-    public Long getId() {
-        return id;
+    public long getCarId() {
+        return carId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCarId(long carId) {
+        this.carId = carId;
     }
 
-    public String getManufacturer() {
-        return manufacturer;
+    public String getCarBrand() {
+        return carBrand;
     }
 
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
+    public void setCarBrand(String carBrand) {
+        this.carBrand = carBrand;
     }
 
-    public String getModelName() {
-        return modelName;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
-    public String getColor() {
-        return color;
+    public Date getYearOfManufacture() {
+        return yearOfManufacture;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setYearOfManufacture(Date yearOfManufacture) {
+        this.yearOfManufacture = yearOfManufacture;
     }
 
-    public String getTransmisson() {
-        return transmisson;
+    public String getEngineCapacity() {
+        return engineCapacity;
     }
 
-    public void setTransmisson(String transmisson) {
-        this.transmisson = transmisson;
+    public void setEngineCapacity(String engineCapacity) {
+        this.engineCapacity = engineCapacity;
     }
 
-    public String getCarType() {
-        return carType;
+    public String getCarColor() {
+        return carColor;
     }
 
-    public void setCarType(String carType) {
-        this.carType = carType;
+    public void setCarColor(String carColor) {
+        this.carColor = carColor;
     }
 
-    public double getPrice() {
-        return price;
+    public Price getPriceId() {
+        return priceId;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPriceId(Price priceId) {
+        this.priceId = priceId;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     @Override
-    public java.lang.String toString() {
+    public String toString() {
         return "Car{" +
-                "id=" + id +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", modelName='" + modelName + '\'' +
-                ", color='" + color + '\'' +
-                ", transmisson='" + transmisson + '\'' +
-                ", carType='" + carType + '\'' +
-                ", price=" + price +
+                "carId=" + carId +
+                ", carBrand='" + carBrand + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", yearOfManufacture=" + yearOfManufacture +
+                ", engineCapacity=" + engineCapacity +
+                ", carColor='" + carColor + '\'' +
+                ", priceId=" + priceId +
+                ", notes='" + notes + '\'' +
                 '}';
     }
 }

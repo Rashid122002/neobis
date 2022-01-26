@@ -1,27 +1,27 @@
-public class Client {
-    private long clientId;
+public class Staff {
+    private int staffId;
     private String lastName;
     private String firstName;
+    private String post;
     private String phoneNumber;
-    private String notes;
 
-    public Client() {
+    public Staff() {
     }
 
-    public Client(long clientId, String lastName, String firstName, String phoneNumber, String notes) {
-        this.clientId = clientId;
+    public Staff(int staffId, String lastName, String firstName, String post, String phoneNumber) {
+        this.staffId = staffId;
         this.lastName = lastName;
         this.firstName = firstName;
+        this.post = post;
         this.phoneNumber = phoneNumber;
-        this.notes = notes;
     }
 
-    public long getClientId() {
-        return clientId;
+    public int getStaffId() {
+        return staffId;
     }
 
-    public void setClientId(long clientId) {
-        this.clientId = clientId;
+    public void setStaffId(int staffId) {
+        this.staffId = staffId;
     }
 
     public String getLastName() {
@@ -40,6 +40,14 @@ public class Client {
         this.firstName = firstName;
     }
 
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -48,22 +56,14 @@ public class Client {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
     @Override
     public String toString() {
-        return "Client{" +
-                "clientId=" + clientId +
+        return "Staff{" +
+                "staffId=" + staffId +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
+                ", post='" + post + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", notes='" + notes + '\'' +
                 '}';
     }
 }

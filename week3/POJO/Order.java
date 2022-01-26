@@ -1,71 +1,123 @@
 import java.util.Date;
 
 public class Order {
-    private Long id;
-    private Date orderDate;
-    private Client client;
-    private Car car;
-    private int quantity;
+    private long orderId;
+    private Client clientId;
+    private Car carId;
+    private Date dateOfPlacement;
+    private String orderNumber;
+    private String typeOfDocument;
+    private String documentNumber;
+    private String address;
+    private DescriptionOfSale saleId;
 
     public Order() {
     }
 
-    public Order(Long id, Date orderDate, Client client, Car car, int quantity) {
-        this.id = id;
-        this.orderDate = orderDate;
-        this.client = client;
-        this.car = car;
-        this.quantity = quantity;
+    public Order(long orderId,
+                 Client clientId,
+                 Car carId,
+                 Date dateOfPlacement,
+                 String orderNumber,
+                 String typeOfDocument,
+                 String documentNumber,
+                 String address,
+                 DescriptionOfSale saleId) {
+        this.orderId = orderId;
+        this.clientId = clientId;
+        this.carId = carId;
+        this.dateOfPlacement = dateOfPlacement;
+        this.orderNumber = orderNumber;
+        this.typeOfDocument = typeOfDocument;
+        this.documentNumber = documentNumber;
+        this.address = address;
+        this.saleId = saleId;
     }
 
-    public Long getId() {
-        return id;
+    public long getOrderId() {
+        return orderId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 
-    public Date getOrderDate() {
-        return orderDate;
+    public Client getClientId() {
+        return clientId;
     }
 
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public void setClientId(Client clientId) {
+        this.clientId = clientId;
     }
 
-    public Client getClient() {
-        return client;
+    public Car getCarId() {
+        return carId;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setCarId(Car carId) {
+        this.carId = carId;
     }
 
-    public Car getCar() {
-        return car;
+    public Date getDateOfPlacement() {
+        return dateOfPlacement;
     }
 
-    public void setCar(Car car) {
-        this.car = car;
+    public void setDateOfPlacement(Date dateOfPlacement) {
+        this.dateOfPlacement = dateOfPlacement;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public String getTypeOfDocument() {
+        return typeOfDocument;
+    }
+
+    public void setTypeOfDocument(String typeOfDocument) {
+        this.typeOfDocument = typeOfDocument;
+    }
+
+    public String getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public DescriptionOfSale getSaleId() {
+        return saleId;
+    }
+
+    public void setSaleId(DescriptionOfSale saleId) {
+        this.saleId = saleId;
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "id=" + id +
-                ", orderDate=" + orderDate +
-                ", client=" + client +
-                ", car=" + car +
-                ", quantity=" + quantity +
+                "orderId=" + orderId +
+                ", clientId=" + clientId +
+                ", carId=" + carId +
+                ", dateOfPlacement=" + dateOfPlacement +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", typeOfDocument='" + typeOfDocument + '\'' +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", saleId=" + saleId +
                 '}';
     }
 }
