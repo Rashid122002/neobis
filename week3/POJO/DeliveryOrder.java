@@ -1,27 +1,31 @@
 import java.util.Date;
+import java.util.Objects;
 
 public class DeliveryOrder {
     private long id;
     private String orderDescription;
     private Provider providerId;
     private Staff staffId;
-    private Date dateOfPlacement;
-    private Date dateOfExecution;
-    private DescriptionOfPurchase purchaseId;
+    private Date placementDate;
+    private Date executionDate;
+    private PurchaseDescription purchaseId;
+
+    public DeliveryOrder() {
+    }
 
     public DeliveryOrder(long id,
                          String orderDescription,
                          Provider providerId,
                          Staff staffId,
-                         Date dateOfPlacement,
-                         Date dateOfExecution,
-                         DescriptionOfPurchase purchaseId) {
+                         Date placementDate,
+                         Date executionDate,
+                         PurchaseDescription purchaseId) {
         this.id = id;
         this.orderDescription = orderDescription;
         this.providerId = providerId;
         this.staffId = staffId;
-        this.dateOfPlacement = dateOfPlacement;
-        this.dateOfExecution = dateOfExecution;
+        this.placementDate = placementDate;
+        this.executionDate = executionDate;
         this.purchaseId = purchaseId;
     }
 
@@ -57,28 +61,47 @@ public class DeliveryOrder {
         this.staffId = staffId;
     }
 
-    public Date getDateOfPlacement() {
-        return dateOfPlacement;
+    public Date getPlacementDate() {
+        return placementDate;
     }
 
-    public void setDateOfPlacement(Date dateOfPlacement) {
-        this.dateOfPlacement = dateOfPlacement;
+    public void setPlacementDate(Date placementDate) {
+        this.placementDate = placementDate;
     }
 
-    public Date getDateOfExecution() {
-        return dateOfExecution;
+    public Date getExecutionDate() {
+        return executionDate;
     }
 
-    public void setDateOfExecution(Date dateOfExecution) {
-        this.dateOfExecution = dateOfExecution;
+    public void setExecutionDate(Date executionDate) {
+        this.executionDate = executionDate;
     }
 
-    public DescriptionOfPurchase getPurchaseId() {
+    public PurchaseDescription getPurchaseId() {
         return purchaseId;
     }
 
-    public void setPurchaseId(DescriptionOfPurchase purchaseId) {
+    public void setPurchaseId(PurchaseDescription purchaseId) {
         this.purchaseId = purchaseId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeliveryOrder that = (DeliveryOrder) o;
+        return id == that.id
+                && Objects.equals(orderDescription, that.orderDescription)
+                && Objects.equals(providerId, that.providerId)
+                && Objects.equals(staffId, that.staffId)
+                && Objects.equals(placementDate, that.placementDate)
+                && Objects.equals(executionDate, that.executionDate)
+                && Objects.equals(purchaseId, that.purchaseId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, orderDescription, providerId, staffId, placementDate, executionDate, purchaseId);
     }
 
     @Override
@@ -88,8 +111,8 @@ public class DeliveryOrder {
                 ", orderDescription='" + orderDescription + '\'' +
                 ", providerId=" + providerId +
                 ", staffId=" + staffId +
-                ", dateOfPlacement=" + dateOfPlacement +
-                ", dateOfExecution=" + dateOfExecution +
+                ", placementDate=" + placementDate +
+                ", executionDate=" + executionDate +
                 ", purchaseId=" + purchaseId +
                 '}';
     }

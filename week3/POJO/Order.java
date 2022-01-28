@@ -1,15 +1,16 @@
 import java.util.Date;
+import java.util.Objects;
 
 public class Order {
     private long orderId;
     private Client clientId;
     private Car carId;
-    private Date dateOfPlacement;
+    private Date placementDate;
     private String orderNumber;
-    private String typeOfDocument;
+    private String documentType;
     private String documentNumber;
     private String address;
-    private DescriptionOfSale saleId;
+    private SaleDescription saleId;
 
     public Order() {
     }
@@ -17,18 +18,18 @@ public class Order {
     public Order(long orderId,
                  Client clientId,
                  Car carId,
-                 Date dateOfPlacement,
+                 Date placementDate,
                  String orderNumber,
-                 String typeOfDocument,
+                 String documentType,
                  String documentNumber,
                  String address,
-                 DescriptionOfSale saleId) {
+                 SaleDescription saleId) {
         this.orderId = orderId;
         this.clientId = clientId;
         this.carId = carId;
-        this.dateOfPlacement = dateOfPlacement;
+        this.placementDate = placementDate;
         this.orderNumber = orderNumber;
-        this.typeOfDocument = typeOfDocument;
+        this.documentType = documentType;
         this.documentNumber = documentNumber;
         this.address = address;
         this.saleId = saleId;
@@ -58,12 +59,12 @@ public class Order {
         this.carId = carId;
     }
 
-    public Date getDateOfPlacement() {
-        return dateOfPlacement;
+    public Date getPlacementDate() {
+        return placementDate;
     }
 
-    public void setDateOfPlacement(Date dateOfPlacement) {
-        this.dateOfPlacement = dateOfPlacement;
+    public void setPlacementDate(Date placementDate) {
+        this.placementDate = placementDate;
     }
 
     public String getOrderNumber() {
@@ -74,12 +75,12 @@ public class Order {
         this.orderNumber = orderNumber;
     }
 
-    public String getTypeOfDocument() {
-        return typeOfDocument;
+    public String getDocumentType() {
+        return documentType;
     }
 
-    public void setTypeOfDocument(String typeOfDocument) {
-        this.typeOfDocument = typeOfDocument;
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
     }
 
     public String getDocumentNumber() {
@@ -98,12 +99,33 @@ public class Order {
         this.address = address;
     }
 
-    public DescriptionOfSale getSaleId() {
+    public SaleDescription getSaleId() {
         return saleId;
     }
 
-    public void setSaleId(DescriptionOfSale saleId) {
+    public void setSaleId(SaleDescription saleId) {
         this.saleId = saleId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return orderId == order.orderId
+                && Objects.equals(clientId, order.clientId)
+                && Objects.equals(carId, order.carId)
+                && Objects.equals(placementDate, order.placementDate)
+                && Objects.equals(orderNumber, order.orderNumber)
+                && Objects.equals(documentType, order.documentType)
+                && Objects.equals(documentNumber, order.documentNumber)
+                && Objects.equals(address, order.address)
+                && Objects.equals(saleId, order.saleId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId, clientId, carId, placementDate, orderNumber, documentType, documentNumber, address, saleId);
     }
 
     @Override
@@ -112,9 +134,9 @@ public class Order {
                 "orderId=" + orderId +
                 ", clientId=" + clientId +
                 ", carId=" + carId +
-                ", dateOfPlacement=" + dateOfPlacement +
+                ", placementDate=" + placementDate +
                 ", orderNumber='" + orderNumber + '\'' +
-                ", typeOfDocument='" + typeOfDocument + '\'' +
+                ", documentType='" + documentType + '\'' +
                 ", documentNumber='" + documentNumber + '\'' +
                 ", address='" + address + '\'' +
                 ", saleId=" + saleId +

@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Client {
     private long clientId;
     private String lastName;
@@ -54,6 +56,19 @@ public class Client {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return clientId == client.clientId && Objects.equals(lastName, client.lastName) && Objects.equals(firstName, client.firstName) && Objects.equals(phoneNumber, client.phoneNumber) && Objects.equals(notes, client.notes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientId, lastName, firstName, phoneNumber, notes);
     }
 
     @Override

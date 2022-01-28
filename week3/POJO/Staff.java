@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Staff {
     private int staffId;
     private String lastName;
@@ -54,6 +56,23 @@ public class Staff {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Staff staff = (Staff) o;
+        return staffId == staff.staffId
+                && Objects.equals(lastName, staff.lastName)
+                && Objects.equals(firstName, staff.firstName)
+                && Objects.equals(post, staff.post)
+                && Objects.equals(phoneNumber, staff.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(staffId, lastName, firstName, post, phoneNumber);
     }
 
     @Override

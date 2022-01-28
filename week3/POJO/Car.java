@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.util.Objects;
 
 public class Car {
     private long carId;
@@ -93,6 +94,26 @@ public class Car {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return carId == car.carId
+                && Objects.equals(carBrand, car.carBrand)
+                && Objects.equals(serialNumber, car.serialNumber)
+                && Objects.equals(yearOfManufacture, car.yearOfManufacture)
+                && Objects.equals(engineCapacity, car.engineCapacity)
+                && Objects.equals(carColor, car.carColor)
+                && Objects.equals(priceId, car.priceId)
+                && Objects.equals(notes, car.notes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(carId, carBrand, serialNumber, yearOfManufacture, engineCapacity, carColor, priceId, notes);
     }
 
     @Override

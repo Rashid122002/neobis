@@ -1,11 +1,12 @@
 import java.util.Date;
+import java.util.Objects;
 
 public class Operation {
-    private long transactionId;
-    private Date dateOfOperation;
+    private long operationId;
+    private Date operationDate;
     private Car carId;
     private DeliveryOrder deliveryOrderId;
-    private String descriptionOfOperation;
+    private String operationDescription;
     private double factoryPrice;
     private double costUpTo;
     private double totalAmount;
@@ -13,38 +14,38 @@ public class Operation {
     public Operation() {
     }
 
-    public Operation(long transactionId,
-                     Date dateOfOperation,
+    public Operation(long operationId,
+                     Date operationDate,
                      Car carId,
                      DeliveryOrder deliveryOrderId,
-                     String descriptionOfOperation,
+                     String operationDescription,
                      double factoryPrice,
                      double costUpTo,
                      double totalAmount) {
-        this.transactionId = transactionId;
-        this.dateOfOperation = dateOfOperation;
+        this.operationId = operationId;
+        this.operationDate = operationDate;
         this.carId = carId;
         this.deliveryOrderId = deliveryOrderId;
-        this.descriptionOfOperation = descriptionOfOperation;
+        this.operationDescription = operationDescription;
         this.factoryPrice = factoryPrice;
         this.costUpTo = costUpTo;
         this.totalAmount = totalAmount;
     }
 
-    public long getTransactionId() {
-        return transactionId;
+    public long getOperationId() {
+        return operationId;
     }
 
-    public void setTransactionId(long transactionId) {
-        this.transactionId = transactionId;
+    public void setOperationId(long operationId) {
+        this.operationId = operationId;
     }
 
-    public Date getDateOfOperation() {
-        return dateOfOperation;
+    public Date getOperationDate() {
+        return operationDate;
     }
 
-    public void setDateOfOperation(Date dateOfOperation) {
-        this.dateOfOperation = dateOfOperation;
+    public void setOperationDate(Date operationDate) {
+        this.operationDate = operationDate;
     }
 
     public Car getCarId() {
@@ -63,12 +64,12 @@ public class Operation {
         this.deliveryOrderId = deliveryOrderId;
     }
 
-    public String getDescriptionOfOperation() {
-        return descriptionOfOperation;
+    public String getOperationDescription() {
+        return operationDescription;
     }
 
-    public void setDescriptionOfOperation(String descriptionOfOperation) {
-        this.descriptionOfOperation = descriptionOfOperation;
+    public void setOperationDescription(String operationDescription) {
+        this.operationDescription = operationDescription;
     }
 
     public double getFactoryPrice() {
@@ -96,13 +97,33 @@ public class Operation {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Operation operation = (Operation) o;
+        return operationId == operation.operationId
+                && Double.compare(operation.factoryPrice, factoryPrice) == 0
+                && Double.compare(operation.costUpTo, costUpTo) == 0
+                && Double.compare(operation.totalAmount, totalAmount) == 0
+                && Objects.equals(operationDate, operation.operationDate)
+                && Objects.equals(carId, operation.carId)
+                && Objects.equals(deliveryOrderId, operation.deliveryOrderId)
+                && Objects.equals(operationDescription, operation.operationDescription);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(operationId, operationDate, carId, deliveryOrderId, operationDescription, factoryPrice, costUpTo, totalAmount);
+    }
+
+    @Override
     public String toString() {
         return "Operation{" +
-                "transactionId=" + transactionId +
-                ", dateOfOperation=" + dateOfOperation +
+                "operationId=" + operationId +
+                ", operationDate=" + operationDate +
                 ", carId=" + carId +
                 ", deliveryOrderId=" + deliveryOrderId +
-                ", descriptionOfOperation='" + descriptionOfOperation + '\'' +
+                ", operationDescription='" + operationDescription + '\'' +
                 ", factoryPrice=" + factoryPrice +
                 ", costUpTo=" + costUpTo +
                 ", totalAmount=" + totalAmount +

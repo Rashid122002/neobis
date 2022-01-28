@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Price {
     private int priceId;
     private double salePrice;
@@ -24,6 +26,19 @@ public class Price {
 
     public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Price price = (Price) o;
+        return priceId == price.priceId && Double.compare(price.salePrice, salePrice) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(priceId, salePrice);
     }
 
     @Override
