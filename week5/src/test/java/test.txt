@@ -1,0 +1,131 @@
+-------------Table purchase_descriptions-------------
+The purchase description inserted successfully!
+The purchase description inserted successfully!
+The purchase description inserted successfully!
+The purchase description inserted successfully!
+Purchase description #1 - Заказано
+Purchase description #2 - Поставлено
+Purchase description #3 - Возвращено
+Purchase description #4 - dsagfdgdsg
+An existing purchase description was updated successfully!
+Purchase description #1 - Заказано
+Purchase description #2 - Поставлено
+Purchase description #3 - Возврат
+Purchase description #4 - dsagfdgdsg
+A purchase description was deleted successfully!
+Purchase description #1 - Заказано
+Purchase description #2 - Поставлено
+Purchase description #3 - Возврат
+
+-------------Table sale_descriptions-------------
+The sale description inserted successfully!
+The sale description inserted successfully!
+The sale description inserted successfully!
+The sale description inserted successfully!
+Sale description #1 - В наличии
+Sale description #2 - Продано
+Sale description #3 - Возвращено
+Sale description #4 - аыврыврыа
+An existing sale description was updated successfully!
+Sale description #1 - В наличии
+Sale description #2 - Продано
+Sale description #3 - Возврат
+Sale description #4 - аыврыврыа
+A sale description was deleted successfully!
+Sale description #1 - В наличии
+Sale description #2 - Продано
+Sale description #3 - Возврат
+
+-------------Table prices-------------
+The price inserted successfully!
+The price inserted successfully!
+Price #1 - 1000000.0
+Price #2 - 2000000.0
+An existing price was updated successfully!
+Price #1 - 1000000.0
+Price #2 - 2500500.0
+A price was deleted successfully!
+Price #1 - 1000000.0
+
+-------------Table cars-------------
+The car inserted successfully!
+The car inserted successfully!
+Car #1 - Mersedes 500 E - B 3342 DD - 1999-02-02 - 5.0 - Black - 1 - Хорошее состояние
+Car #2 - Toyota Camry - T 5466 AA - 2019-01-01 - 4.5 - White - 1 - Отличное состояние
+An existing car was updated successfully!
+Car #1 - Mersedes 500 E - B 3342 DD - 1999-02-02 - 5.0 - Black - 1 - Хорошее состояние
+Car #2 - Toyota Land Cruiser 300 - T 5466 AA - 2019-01-01 - 4.5 - White - 1 - Отличное состояние
+A car was deleted successfully!
+Car #1 - Mersedes 500 E - B 3342 DD - 1999-02-02 - 5.0 - Black - 1 - Хорошее состояние
+
+-------------Table providers-------------
+The staff inserted successfully!
+The staff inserted successfully!
+Provider #1 - Mercedes - Алымбеков Алим - Управляющий - ул. Западная 66 - Бишкек - 4326425463456 - 3425246236534 - чек
+Provider #2 - Toyota - Жаныбеков Элдос - Менеджер - ул. Киевская 506 - Бишкек - 54353645654 - 35636346543643 - чек
+An existing provider was updated successfully!
+Provider #1 - Mercedes - Алымбеков Алим - Управляющий - ул. Западная 66 - Бишкек - 4326425463456 - 3425246236534 - чек
+Provider #2 - Nissan - Жаныбеков Элдос - Менеджер - ул. Киевская 506 - Бишкек - 54353645654 - 35636346543643 - чек
+A provider was deleted successfully!
+Provider #1 - Mercedes - Алымбеков Алим - Управляющий - ул. Западная 66 - Бишкек - 4326425463456 - 3425246236534 - чек
+
+-------------Table clients-------------
+The client inserted successfully!
+The client inserted successfully!
+Client #1 - Nazarbekov - Rashid - 364563463456 - Let's go
+Client #2 - Belekov - Urmat - 7458972857 - dfsfgds
+An existing client was updated successfully!
+Client #1 - Nazarbekov - Rashid - 364563463456 - Let's go
+Client #2 - Mirbekov - Urmat - 7458972857 - dfsfgds
+A client was deleted successfully!
+Client #1 - Nazarbekov - Rashid - 364563463456 - Let's go
+
+-------------Table staff-------------
+The staff inserted successfully!
+The staff inserted successfully!
+The staff inserted successfully!
+Staff #1 - Ян - Петр - Менеджер - 845728572890
+Staff #2 - Коваль - Павел - Бухгалтер - 464536465643
+Staff #3 - Куттубаев - Адилет - Консультант - 423542364356
+An existing staff was updated successfully!
+Staff #1 - Бакиев - Эркин - Менеджер - 758932789754
+Staff #2 - Коваль - Павел - Бухгалтер - 464536465643
+Staff #3 - Куттубаев - Адилет - Консультант - 423542364356
+A staff was deleted successfully!
+Staff #1 - Бакиев - Эркин - Менеджер - 758932789754
+Staff #3 - Куттубаев - Адилет - Консультант - 423542364356
+
+-------------Table delivery_orders-------------
+The delivery order inserted successfully!
+The delivery order inserted successfully!
+Delivery order #1 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 1
+Delivery order #2 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 2
+An existing delivery order was updated successfully!
+Delivery order #1 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 1
+Delivery order #2 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 1
+A delivery order was deleted successfully!
+Delivery order #1 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 1
+
+-------------Table operations-------------
+The operation inserted successfully!
+The operation inserted successfully!
+Operation #1 - 2022-02-07 - 1 - 1 -  - 500000.0 - 800000.0 - 1000000.0
+Operation #2 - 2022-02-07 - 1 - 1 -  - 500000.0 - 800000.0 - 1000000.0
+An existing operation was updated successfully!
+Operation #1 - 2022-02-07 - 1 - 1 -  - 500000.0 - 800000.0 - 1000000.0
+Operation #2 - 2022-02-07 - 1 - 1 -  - 700000.0 - 900000.0 - 1200000.0
+A operation was deleted successfully!
+Operation #1 - 2022-02-07 - 1 - 1 -  - 500000.0 - 800000.0 - 1000000.0
+
+-------------Table orders-------------
+The order inserted successfully!
+The order inserted successfully!
+Order #1 - 1 - 1 - 2022-02-10 - 1 - Passport - 324522332 - st. Chyi 88 - 1
+Order #2 - 1 - 1 - 2022-02-10 - 2 - Passport - 654364643 - st. Chyi 88 - 2
+An existing order was updated successfully!
+Order #1 - 1 - 1 - 2022-02-10 - 1 - Passport - 324522332 - st. Chyi 88 - 1
+Order #2 - 1 - 1 - 2022-02-10 - 2 - Passport - 654364643 - st. Chyi 88 - 3
+A order was deleted successfully!
+Order #1 - 1 - 1 - 2022-02-10 - 1 - Passport - 324522332 - st. Chyi 88 - 1
+
+Process finished with exit code 0
