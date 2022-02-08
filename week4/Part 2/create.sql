@@ -1,3 +1,4 @@
+USE cardealership;
 ALTER TABLE cars
  ADD CONSTRAINT price_id_fk
  FOREIGN KEY (price_id)

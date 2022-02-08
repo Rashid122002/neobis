@@ -18,7 +18,7 @@ CREATE TABLE clients (
   client_id INT UNSIGNED AUTO_INCREMENT,
   last_name VARCHAR(45) NOT NULL,
   first_name VARCHAR(45) NOT NULL,
-  phone_number VARCHAR(45) NOT NULL,
+  phone_number VARCHAR(45) NOT NULL UNIQUE,
   notes VARCHAR(100) DEFAULT NULL,
   PRIMARY KEY (client_id)
 );
@@ -51,9 +51,9 @@ CREATE TABLE orders (
   client_id INT UNSIGNED NOT NULL,
   car_id INT UNSIGNED NOT NULL,
   placement_date DATE NOT NULL,
-  order_number VARCHAR(45) NOT NULL,
+  order_number VARCHAR(45) NOT NULL UNIQUE,
   document_type VARCHAR(45) NOT NULL,
-  document_number VARCHAR(45) NOT NULL,
+  document_number VARCHAR(45) NOT NULL UNIQUE,
   address VARCHAR(45) NOT NULL,
   sale_description_id INT UNSIGNED NOT NULL,
   PRIMARY KEY (order_id)
@@ -66,7 +66,7 @@ CREATE TABLE providers (
   position VARCHAR(45) NOT NULL,
   address VARCHAR(45) NOT NULL,
   city VARCHAR(45) NOT NULL,
-  phone_number VARCHAR(45) NOT NULL,
+  phone_number VARCHAR(45) NOT NULL UNIQUE,
   fax VARCHAR(45) DEFAULT NULL,
   payment_term VARCHAR(45) NOT NULL,
   PRIMARY KEY (provider_id)
@@ -77,7 +77,7 @@ CREATE TABLE staff (
   last_name VARCHAR(45) NOT NULL,
   first_name VARCHAR(45) NOT NULL,
   position VARCHAR(45) NOT NULL,
-  phone_number VARCHAR(45) NOT NULL,
+  phone_number VARCHAR(45) NOT NULL UNIQUE,
   PRIMARY KEY (staff_id)
 );
 
