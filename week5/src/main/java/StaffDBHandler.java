@@ -1,73 +1,161 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class StaffDBHandler extends Configs {
-    Connection dbConnection = null;
+public class StaffDBHandler implements DAO<Staff, Long> {
+    private static Connection connection = null;
 
-    public Connection getDBConnection() throws SQLException, ClassNotFoundException {
-        Class.forName(JDBC_DRIVER);
-        dbConnection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        return dbConnection;
-    }
-
-    public void selectStaff() {
-        try(PreparedStatement ps = getDBConnection().prepareStatement(Statements.SELECT_STAFF.s);
-            ResultSet rs = ps.executeQuery()) {
-
-            while(rs.next()) {
-                long id = rs.getLong("staff_id");
-                String lastName = rs.getString("last_name");
-                String firstName = rs.getString("first_name");
-                String position = rs.getString("position");
-                String phoneNumber = rs.getString("phone_number");
-
-                System.out.println("Staff #" + id + " - " + lastName + " - " + firstName + " - " + position + " - " + phoneNumber);
+    @Override
+    public List<Staff> getAll() {
+        String selectStaff = "SELECT * FROM staff";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectStaff);
+            rs = ps.executeQuery();
+            List<Staff> staff = new ArrayList<Staff>();
+            while (rs.next()) {
+                Staff staff1 = new Staff();
+                staff1.setStaffId(rs.getLong("staff_id"));
+                staff1.setLastName(rs.getString("last_name"));
+                staff1.setFirstName(rs.getString("first_name"));
+                staff1.setPost(rs.getString("position"));
+                staff1.setPhoneNumber(rs.getString("phone_number"));
+                staff.add(staff1);
             }
-        } catch(SQLException | ClassNotFoundException e) {
+            return staff;
+        } catch (SQLException e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void insertStaff(String lastName, String firstName, String position, String phoneNumber) {
-        try(PreparedStatement ps = getDBConnection().prepareStatement(Statements.INSERT_STAFF.s)) {
-            ps.setString(1, lastName);
-            ps.setString(2, firstName);
-            ps.setString(3, position);
-            ps.setString(4, phoneNumber);
+    @Override
+    public Staff getById(Long id) {
+        String selectStaffById = "SELECT * FROM staff WHERE staff_id=?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectStaffById);
+            ps.setLong(1, id);
+            rs = ps.executeQuery();
+            Staff staff = new Staff();
+            while (rs.next()) {
+                staff.setStaffId(rs.getLong("staff_id"));
+                staff.setLastName(rs.getString("last_name"));
+                staff.setFirstName(rs.getString("first_name"));
+                staff.setPost(rs.getString("position"));
+                staff.setPhoneNumber(rs.getString("phone_number"));
+            }
+            return staff;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    @Override
+    public void add(Staff staff) {
+        String insertStaff = "INSERT INTO staff (last_name, first_name, position, phone_number) VALUES(?,?,?,?)";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(insertStaff);
+            ps.setString(1, staff.getLastName());
+            ps.setString(2, staff.getFirstName());
+            ps.setString(3, staff.getPost());
+            ps.setString(4, staff.getPhoneNumber());
             ps.executeUpdate();
             System.out.println("The staff inserted successfully!");
-        } catch(SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void updateStaff(long id, String lastName, String firstName, String position, String phoneNumber) {
-        try(PreparedStatement ps = getDBConnection().prepareStatement(Statements.UPDATE_STAFF.s)) {
-            ps.setString(1, lastName);
-            ps.setString(2, firstName);
-            ps.setString(3, position);
-            ps.setString(4, phoneNumber);
-            ps.setLong(5, id);
-
-            int rowsUpdated = ps.executeUpdate();
-            if (rowsUpdated > 0) {
-                System.out.println("An existing staff was updated successfully!");
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
-    public void deleteStaff(long id) {
-        try(PreparedStatement ps = getDBConnection().prepareStatement(Statements.DELETE_STAFF.s)) {
-            ps.setLong(1, id);
+    @Override
+    public void update(Staff staff) {
+        String updateStaff = "UPDATE staff SET last_name=?, first_name=?, position=?, phone_number=? WHERE staff_id=?";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(updateStaff);
+            ps.setString(1, staff.getLastName());
+            ps.setString(2, staff.getFirstName());
+            ps.setString(3, staff.getPost());
+            ps.setString(4, staff.getPhoneNumber());
+            ps.setLong(5, staff.getStaffId());
+            ps.executeUpdate();
+            System.out.println("The staff updated successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
 
+    @Override
+    public void delete(Long id) {
+        String deleteStaff = "DELETE FROM staff WHERE staff_id=?";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(deleteStaff);
+            ps.setLong(1, id);
             int rowsDeleted = ps.executeUpdate();
-            if(rowsDeleted > 0) {
+            if (rowsDeleted > 0) {
                 System.out.println("A staff was deleted successfully!");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 }

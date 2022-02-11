@@ -1,100 +1,177 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ProvidersDBHandler extends Configs {
-    Connection dbConnection = null;
+public class ProvidersDBHandler implements DAO<Provider, Long> {
+    private static Connection connection = null;
 
-    public Connection getDbConnection() throws SQLException, ClassNotFoundException {
-        Class.forName(JDBC_DRIVER);
-        dbConnection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        return dbConnection;
-    }
-
-    public void selectProviders() {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.SELECT_PROVIDERS.s);
-            ResultSet rs = ps.executeQuery()) {
+    @Override
+    public List<Provider> getAll() {
+        String selectAllProviders = "SELECT * FROM providers";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectAllProviders);
+            rs = ps.executeQuery();
+            List<Provider> providers = new ArrayList<Provider>();
             while(rs.next()) {
-                long id = rs.getLong("provider_id");
-                String companyName = rs.getString("company_name");
-                String companyOfficialName = rs.getString("company_official_name");
-                String position = rs.getString("position");
-                String address = rs.getString("address");
-                String city = rs.getString("city");
-                String phone_number = rs.getString("phone_number");
-                String fax = rs.getString("fax");
-                String paymentTerms = rs.getString("payment_term");
-
-                System.out.println("Provider #" + id + " - " + companyName + " - " + companyOfficialName + " - " +
-                        position + " - " + address + " - " + city + " - " + phone_number + " - " + fax + " - " + paymentTerms);
+                Provider provider = new Provider();
+                provider.setProviderId(rs.getLong("provider_id"));
+                provider.setCompanyName(rs.getString("company_name"));
+                provider.setCompanyOfficialName(rs.getString("company_official_name"));
+                provider.setPost(rs.getString("position"));
+                provider.setAddress(rs.getString("address"));
+                provider.setCity(rs.getString("city"));
+                provider.setPhoneNumber(rs.getString("phone_number"));
+                provider.setFax(rs.getString("fax"));
+                provider.setPaymentTerms(rs.getString("payment_term"));
+                providers.add(provider);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+            return providers;
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void insertProvider(String companyName,
-                               String companyOfficialName,
-                               String position,
-                               String address,
-                               String city,
-                               String phoneNumber,
-                               String fax,
-                               String paymentTerms) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.INSERT_PROVIDER.s)) {
-            ps.setString(1, companyName);
-            ps.setString(2, companyOfficialName);
-            ps.setString(3, position);
-            ps.setString(4, address);
-            ps.setString(5, city);
-            ps.setString(6, phoneNumber);
-            ps.setString(7, fax);
-            ps.setString(8, paymentTerms);
-
-            ps.executeUpdate();
-            System.out.println("The staff inserted successfully!");
-        } catch(SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateProvider(long id,
-                               String companyName,
-                               String companyOfficialName,
-                               String position,
-                               String address,
-                               String city,
-                               String phoneNumber,
-                               String fax,
-                               String paymentTerms) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.UPDATE_PROVIDER.s)) {
-            ps.setString(1, companyName);
-            ps.setString(2, companyOfficialName);
-            ps.setString(3, position);
-            ps.setString(4, address);
-            ps.setString(5, city);
-            ps.setString(6, phoneNumber);
-            ps.setString(7, fax);
-            ps.setString(8, paymentTerms);
-            ps.setLong(9, id);
-
-            int rowsUpdated = ps.executeUpdate();
-            if (rowsUpdated > 0) {
-                System.out.println("An existing provider was updated successfully!");
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
-    public void deleteStaff(long id) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.DELETE_PROVIDER.s)) {
+    @Override
+    public Provider getById(Long id) {
+        String selectAllProviders = "SELECT * FROM providers WHERE provider_id=?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectAllProviders);
             ps.setLong(1, id);
-
-            int rowsDeleted = ps.executeUpdate();
-            if(rowsDeleted > 0) {
-                System.out.println("A provider was deleted successfully!");
+            rs = ps.executeQuery();
+            Provider provider = new Provider();
+            while(rs.next()) {
+                provider.setProviderId(rs.getLong("provider_id"));
+                provider.setCompanyName(rs.getString("company_name"));
+                provider.setCompanyOfficialName(rs.getString("company_official_name"));
+                provider.setPost(rs.getString("position"));
+                provider.setAddress(rs.getString("address"));
+                provider.setCity(rs.getString("city"));
+                provider.setPhoneNumber(rs.getString("phone_number"));
+                provider.setFax(rs.getString("fax"));
+                provider.setPaymentTerms(rs.getString("payment_term"));
             }
-        } catch (SQLException | ClassNotFoundException e) {
+            return provider;
+        } catch (SQLException e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void add(Provider provider) {
+        String insertProvider = "INSERT INTO providers (company_name, company_official_name, position, address, city, phone_number, fax, payment_term) VALUES(?,?,?,?,?,?,?,?)";
+        PreparedStatement ps = null;
+        try{
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(insertProvider);
+            ps.setString(1, provider.getCompanyName());
+            ps.setString(2, provider.getCompanyOfficialName());
+            ps.setString(3, provider.getPost());
+            ps.setString(4, provider.getAddress());
+            ps.setString(5, provider.getCity());
+            ps.setString(6, provider.getPhoneNumber());
+            ps.setString(7, provider.getFax());
+            ps.setString(8, provider.getPaymentTerms());
+            ps.executeUpdate();
+            System.out.println("The provider inserted successfully!");
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void update(Provider provider) {
+        String updateProvider = "UPDATE providers SET company_name=?, company_official_name=?, position=?, address=?, city=?, phone_number=?, fax=?, payment_term=? WHERE provider_id=?";
+        PreparedStatement ps = null;
+        try{
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(updateProvider);
+            ps.setString(1, provider.getCompanyName());
+            ps.setString(2, provider.getCompanyOfficialName());
+            ps.setString(3, provider.getPost());
+            ps.setString(4, provider.getAddress());
+            ps.setString(5, provider.getCity());
+            ps.setString(6, provider.getPhoneNumber());
+            ps.setString(7, provider.getFax());
+            ps.setString(8, provider.getPaymentTerms());
+            ps.setLong(9, provider.getProviderId());
+            ps.executeUpdate();
+            System.out.println("An existing provider was updated successfully!");
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
+        String deleteProvider = "DELETE FROM providers WHERE provider_id=?";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(deleteProvider);
+            ps.setLong(1, id);
+            int rowsDeleted = ps.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("A client was deleted successfully!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 }

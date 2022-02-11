@@ -3,129 +3,132 @@ The purchase description inserted successfully!
 The purchase description inserted successfully!
 The purchase description inserted successfully!
 The purchase description inserted successfully!
-Purchase description #1 - Заказано
-Purchase description #2 - Поставлено
-Purchase description #3 - Возвращено
-Purchase description #4 - dsagfdgdsg
-An existing purchase description was updated successfully!
-Purchase description #1 - Заказано
-Purchase description #2 - Поставлено
-Purchase description #3 - Возврат
-Purchase description #4 - dsagfdgdsg
+PurchaseDescription{purchaseId=1, description='Заказано'}
+PurchaseDescription{purchaseId=2, description='Поставлено'}
+PurchaseDescription{purchaseId=3, description='Возвращено'}
+PurchaseDescription{purchaseId=4, description='dsagfdgdsg'}
+The purchase description updated successfully!
+PurchaseDescription{purchaseId=1, description='Заказано'}
+PurchaseDescription{purchaseId=2, description='Поставлено'}
+PurchaseDescription{purchaseId=3, description='Возврат'}
+PurchaseDescription{purchaseId=4, description='dsagfdgdsg'}
 A purchase description was deleted successfully!
-Purchase description #1 - Заказано
-Purchase description #2 - Поставлено
-Purchase description #3 - Возврат
+PurchaseDescription{purchaseId=1, description='Заказано'}
+PurchaseDescription{purchaseId=2, description='Поставлено'}
+PurchaseDescription{purchaseId=3, description='Возврат'}
 
 -------------Table sale_descriptions-------------
 The sale description inserted successfully!
 The sale description inserted successfully!
 The sale description inserted successfully!
 The sale description inserted successfully!
-Sale description #1 - В наличии
-Sale description #2 - Продано
-Sale description #3 - Возвращено
-Sale description #4 - аыврыврыа
-An existing sale description was updated successfully!
-Sale description #1 - В наличии
-Sale description #2 - Продано
-Sale description #3 - Возврат
-Sale description #4 - аыврыврыа
+SaleDescription{saleId=1, description='В наличии'}
+SaleDescription{saleId=2, description='Продано'}
+SaleDescription{saleId=3, description='Возвращено'}
+SaleDescription{saleId=4, description='аыврыврыа'}
+The sale description updated successfully!
+SaleDescription{saleId=1, description='В наличии'}
+SaleDescription{saleId=2, description='Продано'}
+SaleDescription{saleId=3, description='Возвращено'}
+SaleDescription{saleId=4, description='аыврыврыа'}
 A sale description was deleted successfully!
-Sale description #1 - В наличии
-Sale description #2 - Продано
-Sale description #3 - Возврат
+SaleDescription{saleId=1, description='В наличии'}
+SaleDescription{saleId=2, description='Продано'}
+SaleDescription{saleId=3, description='Возвращено'}
 
 -------------Table prices-------------
 The price inserted successfully!
 The price inserted successfully!
-Price #1 - 1000000.0
-Price #2 - 2000000.0
+Price{priceId=1, salePrice=1000000.0}
+Price{priceId=2, salePrice=2000000.0}
 An existing price was updated successfully!
-Price #1 - 1000000.0
-Price #2 - 2500500.0
+Price{priceId=1, salePrice=1000000.0}
+Price{priceId=2, salePrice=2500500.0}
 A price was deleted successfully!
-Price #1 - 1000000.0
+Price{priceId=1, salePrice=1000000.0}
 
 -------------Table cars-------------
 The car inserted successfully!
 The car inserted successfully!
-Car #1 - Mersedes 500 E - B 3342 DD - 1999-02-02 - 5.0 - Black - 1 - Хорошее состояние
-Car #2 - Toyota Camry - T 5466 AA - 2019-01-01 - 4.5 - White - 1 - Отличное состояние
+Car{carId=1, carBrand='Mersedes 500 E', serialNumber='B 3342 DD', yearOfManufacture=1999-02-02, engineCapacity=5.0, carColor='Black', priceId=1, notes='Хорошее состояние'}
+Car{carId=2, carBrand='Toyota Camry', serialNumber='T 5466 AA', yearOfManufacture=2019-01-01, engineCapacity=4.5, carColor='White', priceId=1, notes='Отличное состояние'}
 An existing car was updated successfully!
-Car #1 - Mersedes 500 E - B 3342 DD - 1999-02-02 - 5.0 - Black - 1 - Хорошее состояние
-Car #2 - Toyota Land Cruiser 300 - T 5466 AA - 2019-01-01 - 4.5 - White - 1 - Отличное состояние
+Car{carId=1, carBrand='Mersedes 500 E', serialNumber='B 3342 DD', yearOfManufacture=1999-02-02, engineCapacity=5.0, carColor='Black', priceId=1, notes='Хорошее состояние'}
+Car{carId=2, carBrand='Toyota Land Cruiser 300', serialNumber='T 5466 AA', yearOfManufacture=2019-01-01, engineCapacity=4.5, carColor='White', priceId=1, notes='Отличное состояние'}
 A car was deleted successfully!
-Car #1 - Mersedes 500 E - B 3342 DD - 1999-02-02 - 5.0 - Black - 1 - Хорошее состояние
+Car{carId=1, carBrand='Mersedes 500 E', serialNumber='B 3342 DD', yearOfManufacture=1999-02-02, engineCapacity=5.0, carColor='Black', priceId=1, notes='Хорошее состояние'}
 
 -------------Table providers-------------
-The staff inserted successfully!
-The staff inserted successfully!
-Provider #1 - Mercedes - Алымбеков Алим - Управляющий - ул. Западная 66 - Бишкек - 4326425463456 - 3425246236534 - чек
-Provider #2 - Toyota - Жаныбеков Элдос - Менеджер - ул. Киевская 506 - Бишкек - 54353645654 - 35636346543643 - чек
+The provider inserted successfully!
+The provider inserted successfully!
+Provider{providerId=1, companyName='Mercedes', companyOfficialName='Алымбеков Алим', post='Управляющий', address='ул. Западная 66', city='Бишкек', phoneNumber='4326425463456', fax='3425246236534', paymentTerms='чек'}
+Provider{providerId=2, companyName='Toyota', companyOfficialName='Жаныбеков Элдос', post='Менеджер', address='ул. Киевская 506', city='Бишкек', phoneNumber='54353645654', fax='35636346543643', paymentTerms='чек'}
 An existing provider was updated successfully!
-Provider #1 - Mercedes - Алымбеков Алим - Управляющий - ул. Западная 66 - Бишкек - 4326425463456 - 3425246236534 - чек
-Provider #2 - Nissan - Жаныбеков Элдос - Менеджер - ул. Киевская 506 - Бишкек - 54353645654 - 35636346543643 - чек
-A provider was deleted successfully!
-Provider #1 - Mercedes - Алымбеков Алим - Управляющий - ул. Западная 66 - Бишкек - 4326425463456 - 3425246236534 - чек
+Provider{providerId=1, companyName='Mercedes', companyOfficialName='Алымбеков Алим', post='Управляющий', address='ул. Западная 66', city='Бишкек', phoneNumber='4326425463456', fax='3425246236534', paymentTerms='чек'}
+Provider{providerId=2, companyName='Nissan', companyOfficialName='Жаныбеков Элдос', post='Менеджер', address='ул. Киевская 506', city='Бишкек', phoneNumber='54353645654', fax='35636346543643', paymentTerms='чек'}
+A client was deleted successfully!
+Provider{providerId=1, companyName='Mercedes', companyOfficialName='Алымбеков Алим', post='Управляющий', address='ул. Западная 66', city='Бишкек', phoneNumber='4326425463456', fax='3425246236534', paymentTerms='чек'}
 
 -------------Table clients-------------
 The client inserted successfully!
 The client inserted successfully!
-Client #1 - Nazarbekov - Rashid - 364563463456 - Let's go
-Client #2 - Belekov - Urmat - 7458972857 - dfsfgds
+Client{clientId=1, lastName='Nazarbekov', firstName='Rashid', phoneNumber='364563463456', notes='Let's go'}
+Client{clientId=2, lastName='Belekov', firstName='Urmat', phoneNumber='7458972857', notes='dfsfgds'}
 An existing client was updated successfully!
-Client #1 - Nazarbekov - Rashid - 364563463456 - Let's go
-Client #2 - Mirbekov - Urmat - 7458972857 - dfsfgds
+Client{clientId=1, lastName='Nazarbekov', firstName='Rashid', phoneNumber='364563463456', notes='Let's go'}
+Client{clientId=2, lastName='Mirbekov', firstName='Urmat', phoneNumber='7458972857', notes='dfsfgds'}
 A client was deleted successfully!
-Client #1 - Nazarbekov - Rashid - 364563463456 - Let's go
+Client{clientId=1, lastName='Nazarbekov', firstName='Rashid', phoneNumber='364563463456', notes='Let's go'}
 
 -------------Table staff-------------
 The staff inserted successfully!
 The staff inserted successfully!
 The staff inserted successfully!
-Staff #1 - Ян - Петр - Менеджер - 845728572890
-Staff #2 - Коваль - Павел - Бухгалтер - 464536465643
-Staff #3 - Куттубаев - Адилет - Консультант - 423542364356
-An existing staff was updated successfully!
-Staff #1 - Бакиев - Эркин - Менеджер - 758932789754
-Staff #2 - Коваль - Павел - Бухгалтер - 464536465643
-Staff #3 - Куттубаев - Адилет - Консультант - 423542364356
+Staff{staffId=1, lastName='Ян', firstName='Петр', post='Менеджер', phoneNumber='845728572890'}
+Staff{staffId=2, lastName='Коваль', firstName='Павел', post='Бухгалтер', phoneNumber='464536465643'}
+Staff{staffId=3, lastName='Куттубаев', firstName='Адилет', post='Консультант', phoneNumber='423542364356'}
+The staff updated successfully!
+Staff{staffId=1, lastName='Бакиев', firstName='Эркин', post='Менеджер', phoneNumber='845728572890'}
+Staff{staffId=2, lastName='Коваль', firstName='Павел', post='Бухгалтер', phoneNumber='464536465643'}
+Staff{staffId=3, lastName='Куттубаев', firstName='Адилет', post='Консультант', phoneNumber='423542364356'}
 A staff was deleted successfully!
-Staff #1 - Бакиев - Эркин - Менеджер - 758932789754
-Staff #3 - Куттубаев - Адилет - Консультант - 423542364356
+Staff{staffId=1, lastName='Бакиев', firstName='Эркин', post='Менеджер', phoneNumber='845728572890'}
+Staff{staffId=3, lastName='Куттубаев', firstName='Адилет', post='Консультант', phoneNumber='423542364356'}
 
 -------------Table delivery_orders-------------
 The delivery order inserted successfully!
 The delivery order inserted successfully!
-Delivery order #1 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 1
-Delivery order #2 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 2
+DeliveryOrder{id=1, orderDescription='', providerId=1, staffId=1, placementDate=2022-02-08, executionDate=2022-02-10, purchaseId=1}
+DeliveryOrder{id=2, orderDescription='', providerId=1, staffId=1, placementDate=2022-02-08, executionDate=2022-02-10, purchaseId=2}
 An existing delivery order was updated successfully!
-Delivery order #1 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 1
-Delivery order #2 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 1
+DeliveryOrder{id=1, orderDescription='', providerId=1, staffId=1, placementDate=2022-02-08, executionDate=2022-02-10, purchaseId=1}
+DeliveryOrder{id=2, orderDescription='', providerId=1, staffId=1, placementDate=2022-02-08, executionDate=2022-02-10, purchaseId=2}
 A delivery order was deleted successfully!
-Delivery order #1 -  - 1 - 1 - 2022-02-08 - 2022-02-10 - 1
+DeliveryOrder{id=1, orderDescription='', providerId=1, staffId=1, placementDate=2022-02-08, executionDate=2022-02-10, purchaseId=1}
+DeliveryOrder{id=2, orderDescription='', providerId=1, staffId=1, placementDate=2022-02-08, executionDate=2022-02-10, purchaseId=2}
 
 -------------Table operations-------------
 The operation inserted successfully!
 The operation inserted successfully!
-Operation #1 - 2022-02-07 - 1 - 1 -  - 500000.0 - 800000.0 - 1000000.0
-Operation #2 - 2022-02-07 - 1 - 1 -  - 500000.0 - 800000.0 - 1000000.0
+Operation{operationId=1, operationDate=2022-02-07, carId=1, deliveryOrderId=1, operationDescription='', factoryPrice=500000.0, costUpTo=800000.0, totalAmount=1000000.0}
+Operation{operationId=2, operationDate=2022-02-07, carId=1, deliveryOrderId=1, operationDescription='', factoryPrice=500000.0, costUpTo=800000.0, totalAmount=1000000.0}
 An existing operation was updated successfully!
-Operation #1 - 2022-02-07 - 1 - 1 -  - 500000.0 - 800000.0 - 1000000.0
-Operation #2 - 2022-02-07 - 1 - 1 -  - 700000.0 - 900000.0 - 1200000.0
-A operation was deleted successfully!
-Operation #1 - 2022-02-07 - 1 - 1 -  - 500000.0 - 800000.0 - 1000000.0
+Operation{operationId=1, operationDate=2022-02-07, carId=1, deliveryOrderId=1, operationDescription='', factoryPrice=500000.0, costUpTo=800000.0, totalAmount=1000000.0}
+Operation{operationId=2, operationDate=2022-02-07, carId=1, deliveryOrderId=1, operationDescription='', factoryPrice=500000.0, costUpTo=800000.0, totalAmount=1000000.0}
+An operation was deleted successfully!
+Operation{operationId=1, operationDate=2022-02-07, carId=1, deliveryOrderId=1, operationDescription='', factoryPrice=500000.0, costUpTo=800000.0, totalAmount=1000000.0}
+Operation{operationId=2, operationDate=2022-02-07, carId=1, deliveryOrderId=1, operationDescription='', factoryPrice=500000.0, costUpTo=800000.0, totalAmount=1000000.0}
 
 -------------Table orders-------------
 The order inserted successfully!
 The order inserted successfully!
-Order #1 - 1 - 1 - 2022-02-10 - 1 - Passport - 324522332 - st. Chyi 88 - 1
-Order #2 - 1 - 1 - 2022-02-10 - 2 - Passport - 654364643 - st. Chyi 88 - 2
+Order{orderId=1, clientId=1, carId=1, placementDate=2022-02-10, orderNumber='1', documentType='Passport', documentNumber='324522332', address='st. Chyi 88', saleId=1}
+Order{orderId=2, clientId=1, carId=1, placementDate=2022-02-10, orderNumber='2', documentType='Passport', documentNumber='654364643', address='st. Chyi 88', saleId=2}
 An existing order was updated successfully!
-Order #1 - 1 - 1 - 2022-02-10 - 1 - Passport - 324522332 - st. Chyi 88 - 1
-Order #2 - 1 - 1 - 2022-02-10 - 2 - Passport - 654364643 - st. Chyi 88 - 3
-A order was deleted successfully!
-Order #1 - 1 - 1 - 2022-02-10 - 1 - Passport - 324522332 - st. Chyi 88 - 1
+Order{orderId=1, clientId=1, carId=1, placementDate=2022-02-10, orderNumber='1', documentType='Passport', documentNumber='324522332', address='st. Chyi 88', saleId=1}
+Order{orderId=2, clientId=1, carId=1, placementDate=2022-02-10, orderNumber='2', documentType='Passport', documentNumber='654364643', address='st. Chyi 88', saleId=2}
+An order was deleted successfully!
+Order{orderId=1, clientId=1, carId=1, placementDate=2022-02-10, orderNumber='1', documentType='Passport', documentNumber='324522332', address='st. Chyi 88', saleId=1}
+Order{orderId=2, clientId=1, carId=1, placementDate=2022-02-10, orderNumber='2', documentType='Passport', documentNumber='654364643', address='st. Chyi 88', saleId=2}
 
 Process finished with exit code 0

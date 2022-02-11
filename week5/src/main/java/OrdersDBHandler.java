@@ -1,101 +1,180 @@
 import java.sql.*;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-public class OrdersDBHandler extends  Configs {
-    Connection dbConnection = null;
+public class OrdersDBHandler implements DAO<Order, Long> {
+    private static Connection connection = null;
 
-    public Connection getDbConnection() throws SQLException, ClassNotFoundException {
-        Class.forName(JDBC_DRIVER);
-        dbConnection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        return dbConnection;
-    }
-
-    public void selectOrders() {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.SELECT_ORDERS.s);
-            ResultSet rs = ps.executeQuery()) {
+    @Override
+    public List<Order> getAll() {
+        String selectAllOrders = "SELECT * FROM orders";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectAllOrders);
+            rs = ps.executeQuery();
+            List<Order> orders = new ArrayList<Order>();
             while(rs.next()) {
-                long orderId = rs.getLong("order_id");
-                long clientId = rs.getLong("client_id");
-                long carId = rs.getLong("car_id");
-                Date placementDate = rs.getDate("placement_date");
-                String orderNumber = rs.getString("order_number");
-                String documentType = rs.getString("document_type");
-                String documentNumber = rs.getString("document_number");
-                String address = rs.getString("address");
-                long saleDescriptionId = rs.getLong("sale_description_id");
-
-                System.out.println("Order #" + orderId + " - " + clientId + " - " + carId + " - " +
-                        placementDate + " - " + orderNumber + " - " + documentType + " - " + documentNumber + " - " + address + " - " + saleDescriptionId);
+                Order order = new Order();
+                order.setOrderId(rs.getLong("order_id"));
+                order.setClientId(rs.getLong("client_id"));
+                order.setCarId(rs.getLong("car_id"));
+                order.setPlacementDate(rs.getDate("placement_date"));
+                order.setOrderNumber(rs.getString("order_number"));
+                order.setDocumentType(rs.getString("document_type"));
+                order.setDocumentNumber(rs.getString("document_number"));
+                order.setAddress(rs.getString("address"));
+                order.setSaleId(rs.getInt("sale_description_id"));
+                orders.add(order);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+            return orders;
+        } catch (SQLException e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void insertOrder(long clientId,
-                            long carId,
-                            LocalDate placementDate,
-                            String orderNumber,
-                            String documentType,
-                            String documentNumber,
-                            String address,
-                            long saleDescriptionId) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.INSERT_ORDER.s)) {
-            ps.setLong(1, clientId);
-            ps.setLong(2, carId);
-            ps.setDate(3, Date.valueOf(placementDate));
-            ps.setString(4, orderNumber);
-            ps.setString(5, documentType);
-            ps.setString(6, documentNumber);
-            ps.setString(7, address);
-            ps.setLong(8, saleDescriptionId);
+    @Override
+    public Order getById(Long id) {
+        String selectOrderById = "SELECT * FROM orders WHERE order_id=?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectOrderById);
+            ps.setLong(1, id);
+            rs = ps.executeQuery();
+            Order order = new Order();
+            while(rs.next()) {
+                order.setOrderId(rs.getLong("order_id"));
+                order.setClientId(rs.getLong("client_id"));
+                order.setCarId(rs.getLong("car_id"));
+                order.setPlacementDate(rs.getDate("placement_date"));
+                order.setOrderNumber(rs.getString("order_number"));
+                order.setDocumentType(rs.getString("document_type"));
+                order.setDocumentNumber(rs.getString("document_number"));
+                order.setAddress(rs.getString("address"));
+                order.setSaleId(rs.getInt("sale_description_id"));
+            }
+            return order;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    @Override
+    public void add(Order order) {
+        String insertOrder = "INSERT INTO orders (client_id, car_id, placement_date, order_number, document_type, document_number, address, sale_description_id) VALUES(?,?,?,?,?,?,?,?)";
+        PreparedStatement ps = null;
+        try{
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(insertOrder);
+            ps.setLong(1, order.getClientId());
+            ps.setLong(2, order.getCarId());
+            ps.setDate(3, (Date) order.getPlacementDate());
+            ps.setString(4, order.getOrderNumber());
+            ps.setString(5, order.getDocumentType());
+            ps.setString(6, order.getDocumentNumber());
+            ps.setString(7, order.getAddress());
+            ps.setInt(8, order.getSaleId());
             ps.executeUpdate();
             System.out.println("The order inserted successfully!");
-        } catch(SQLException | ClassNotFoundException e) {
+        } catch(SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void updateOrder(long orderId,
-                            long clientId,
-                            long carId,
-                            LocalDate placementDate,
-                            String orderNumber,
-                            String documentType,
-                            String documentNumber,
-                            String address,
-                            long saleDescriptionId) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.UPDATE_ORDER.s)) {
-            ps.setLong(1, clientId);
-            ps.setLong(2, carId);
-            ps.setDate(3, Date.valueOf(placementDate));
-            ps.setString(4, orderNumber);
-            ps.setString(5, documentType);
-            ps.setString(6, documentNumber);
-            ps.setString(7, address);
-            ps.setLong(8, saleDescriptionId);
-            ps.setLong(9, orderId);
-
+    @Override
+    public void update(Order order) {
+        String updateOrder = "UPDATE orders SET client_id=?, car_id=?, placement_date=?, order_number=?, document_type=?, document_number=?, address=?, sale_description_id=? WHERE order_id=?";
+        PreparedStatement ps = null;
+        try{
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(updateOrder);
+            ps.setLong(1, order.getClientId());
+            ps.setLong(2, order.getCarId());
+            ps.setDate(3, (Date) order.getPlacementDate());
+            ps.setString(4, order.getOrderNumber());
+            ps.setString(5, order.getDocumentType());
+            ps.setString(6, order.getDocumentNumber());
+            ps.setString(7, order.getAddress());
+            ps.setInt(8, order.getSaleId());
+            ps.setLong(9, order.getOrderId());
+            ps.executeUpdate();
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated > 0) {
                 System.out.println("An existing order was updated successfully!");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch(SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void deleteOrder(long orderId) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.DELETE_ORDER.s)) {
-            ps.setLong(1, orderId);
-
+    @Override
+    public void delete(Long id) {
+        String deleteOrder = "DELETE FROM orders WHERE order_id=?";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(deleteOrder);
+            ps.setLong(1, id);
             int rowsDeleted = ps.executeUpdate();
-            if(rowsDeleted > 0) {
-                System.out.println("A order was deleted successfully!");
+            if (rowsDeleted > 0) {
+                System.out.println("An order was deleted successfully!");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 }

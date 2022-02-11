@@ -1,80 +1,163 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ClientDBHandler extends Configs {
-    Connection dbConnection = null;
+public class ClientDBHandler implements DAO<Client, Long> {
+    private static Connection connection = null;
 
-    public Connection getDBConnection()
-            throws ClassNotFoundException, SQLException {
-        Class.forName(JDBC_DRIVER);
-        dbConnection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        return dbConnection;
-    }
-
-    public void selectClients() {
-        try (PreparedStatement ps = getDBConnection().prepareStatement(Statements.SELECT_CLIENTS.s);
-             ResultSet rs = ps.executeQuery()) {
+    @Override
+    public List<Client> getAll() {
+        String selectAllClients = "SELECT * FROM clients";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectAllClients);
+            rs = ps.executeQuery();
+            List<Client> clients = new ArrayList<Client>();
             while (rs.next()) {
-                long id = rs.getLong("client_id");
-                String lastName = rs.getString("last_name");
-                String firstName = rs.getString("first_name");
-                String phoneNumber = rs.getString("phone_number");
-                String notes = rs.getString("notes");
-
-                System.out.println("Client #" + id + " - " + lastName + " - " + firstName + " - " + phoneNumber + " - " + notes);
+                Client client = new Client();
+                client.setClientId(rs.getLong("client_id"));
+                client.setLastName(rs.getString("last_name"));
+                client.setFirstName(rs.getString("first_name"));
+                client.setPhoneNumber(rs.getString("phone_number"));
+                client.setNotes(rs.getString("notes"));
+                clients.add(client);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+            return clients;
+        } catch (SQLException e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void insertClient(String lastName,
-                          String firstName,
-                          String phoneNumber,
-                          String notes) {
-        try(PreparedStatement ps = getDBConnection().prepareStatement(Statements.INSERT_CLIENT.s)){
-            ps.setString(1, lastName);
-            ps.setString(2, firstName);
-            ps.setString(3, phoneNumber);
-            ps.setString(4, notes);
+    @Override
+    public Client getById(Long id) {
+        String selectClientById = "SELECT * FROM clients WHERE client_id=?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectClientById);
+            ps.setLong(1, id);
+            rs = ps.executeQuery();
+            Client client = new Client();
+            while (rs.next()) {
+                client.setClientId(rs.getLong("client_id"));
+                client.setLastName(rs.getString("last_name"));
+                client.setFirstName(rs.getString("first_name"));
+                client.setPhoneNumber(rs.getString("phone_number"));
+                client.setNotes(rs.getString("notes"));
+            }
+            return client;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    @Override
+    public void add(Client client) {
+        String insertClient = "INSERT INTO clients (last_name, first_name, phone_number, notes) VALUES(?,?,?,?)";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(insertClient);
+            ps.setString(1, client.getLastName());
+            ps.setString(2, client.getFirstName());
+            ps.setString(3, client.getPhoneNumber());
+            ps.setString(4, client.getNotes());
             ps.executeUpdate();
             System.out.println("The client inserted successfully!");
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
-    public void updateClient(long id, String lastName, String firstName, String phoneNumber, String notes) {
-        try(PreparedStatement ps = getDBConnection().prepareStatement(Statements.UPDATE_CLIENT.s)) {
-            ps.setString(1, lastName);
-            ps.setString(2, firstName);
-            ps.setString(3, phoneNumber);
-            ps.setString(4, notes);
-            ps.setLong(5, id);
-
+    @Override
+    public void update(Client client) {
+        String updateClient = "UPDATE clients SET last_name=?, first_name=?, phone_number=?, notes=? WHERE client_id=?";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(updateClient);
+            ps.setString(1, client.getLastName());
+            ps.setString(2, client.getFirstName());
+            ps.setString(3, client.getPhoneNumber());
+            ps.setString(4, client.getNotes());
+            ps.setLong(5, client.getClientId());
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated > 0) {
                 System.out.println("An existing client was updated successfully!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
-    public void deleteClient(long id) {
-        try(PreparedStatement ps = getDBConnection().prepareStatement(Statements.DELETE_CLIENT.s)) {
+    @Override
+    public void delete(Long id) {
+        String deleteClient = "DELETE FROM clients WHERE client_id=?";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(deleteClient);
             ps.setLong(1, id);
-
             int rowsDeleted = ps.executeUpdate();
             if (rowsDeleted > 0) {
                 System.out.println("A client was deleted successfully!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 }

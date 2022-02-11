@@ -1,64 +1,149 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PricesDBHandler extends Configs {
-    Connection dbConnection = null;
+public class PricesDBHandler implements DAO<Price, Integer> {
+    private static Connection connection = null;
 
-    public Connection getDbConnection() throws SQLException, ClassNotFoundException {
-        Class.forName(JDBC_DRIVER);
-        dbConnection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        return dbConnection;
-    }
-
-    public void selectPrices() {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.SELECT_PRICES.s);
-            ResultSet rs = ps.executeQuery()) {
-
+    @Override
+    public List<Price> getAll() {
+        String selectAllPrices = "SELECT * FROM prices";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectAllPrices);
+            rs = ps.executeQuery();
+            List<Price> prices = new ArrayList<Price>();
             while(rs.next()) {
-                long id = rs.getLong("price_id");
-                double salePrice = rs.getDouble("sale_price");
-
-                System.out.println("Price #" + id + " - " + salePrice);
+                Price price = new Price();
+                price.setPriceId(rs.getInt("price_id"));
+                price.setSalePrice(rs.getDouble("sale_price"));
+                prices.add(price);
             }
-        } catch(SQLException | ClassNotFoundException e) {
+            return prices;
+        } catch(SQLException e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void insertPrice(double salePrice) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.INSERT_PRICE.s)) {
-            ps.setDouble(1, salePrice);
+    @Override
+    public Price getById(Integer id) {
+        String selectPriceById = "SELECT * FROM prices WHERE price_id=?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectPriceById);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            Price price = new Price();
+            while(rs.next()) {
+                price.setPriceId(rs.getInt("price_id"));
+                price.setSalePrice(rs.getDouble("sale_price"));
+            }
+            return price;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    @Override
+    public void add(Price price) {
+        String insertPrice = "INSERT INTO prices (sale_price) VALUES(?)";
+        PreparedStatement ps = null;
+        try{
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(insertPrice);
+            ps.setDouble(1, price.getSalePrice());
             ps.executeUpdate();
             System.out.println("The price inserted successfully!");
-        } catch(SQLException | ClassNotFoundException e) {
+        } catch(SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void updatePrice(long id, double salePrice) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.UPDATE_PRICE.s)) {
-            ps.setDouble(1, salePrice);
-            ps.setLong(2, id);
-
-            int rowsUpdated = ps.executeUpdate();
-            if (rowsUpdated > 0) {
-                System.out.println("An existing price was updated successfully!");
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
-    public void deletePrice(long id) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.DELETE_PRICE.s)) {
-            ps.setLong(1, id);
+    @Override
+    public void update(Price price) {
+        String updatePrice = "UPDATE prices SET sale_price=? WHERE price_id=?";
+        PreparedStatement ps = null;
+        try{
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(updatePrice);
+            ps.setDouble(1, price.getSalePrice());
+            ps.setInt(2, price.getPriceId());
+            ps.executeUpdate();
+            System.out.println("An existing price was updated successfully!");
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    @Override
+    public void delete(Integer id) {
+        String deletePrice = "DELETE FROM prices WHERE price_id=?";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(deletePrice);
+            ps.setLong(1, id);
             int rowsDeleted = ps.executeUpdate();
             if(rowsDeleted > 0) {
                 System.out.println("A price was deleted successfully!");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

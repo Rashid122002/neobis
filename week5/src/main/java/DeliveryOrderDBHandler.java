@@ -1,91 +1,177 @@
 import java.sql.*;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DeliveryOrderDBHandler extends Configs {
-    Connection dbConnection = null;
+public class DeliveryOrderDBHandler implements DAO<DeliveryOrder, Long> {
+    private static Connection connection = null;
 
-    public Connection getDbConnection() throws SQLException, ClassNotFoundException {
-        Class.forName(JDBC_DRIVER);
-        dbConnection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        return dbConnection;
-    }
-
-    public void selectDeliveryOrders() {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.SELECT_DELIVERY_ORDERS.s);
-            ResultSet rs = ps.executeQuery()) {
+    @Override
+    public List<DeliveryOrder> getAll() {
+        String selectAllDeliveryOrders = "SELECT * FROM delivery_orders";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectAllDeliveryOrders);
+            rs = ps.executeQuery();
+            List<DeliveryOrder> deliveryOrders = new ArrayList<DeliveryOrder>();
             while(rs.next()) {
-                long id = rs.getLong("delivery_order_id");
-                String orderDescription = rs.getString("order_description");
-                long providerId = rs.getLong("provider_id");
-                long staffId = rs.getLong("staff_id");
-                Date placementDate = rs.getDate("placement_date");
-                Date executionDate = rs.getDate("execution_date");
-                long purchaseDescriptionId = rs.getLong("purchase_description_id");
-
-                System.out.println("Delivery order #" + id + " - " + orderDescription + " - " + providerId + " - " +
-                        staffId + " - " + placementDate + " - " + executionDate + " - " + purchaseDescriptionId);
+                DeliveryOrder deliveryOrder = new DeliveryOrder();
+                deliveryOrder.setId(rs.getLong("delivery_order_id"));
+                deliveryOrder.setOrderDescription(rs.getString("order_description"));
+                deliveryOrder.setProviderId(rs.getLong("provider_id"));
+                deliveryOrder.setStaffId(rs.getLong("staff_id"));
+                deliveryOrder.setPlacementDate(rs.getDate("placement_date"));
+                deliveryOrder.setExecutionDate(rs.getDate("execution_date"));
+                deliveryOrder.setPurchaseId(rs.getInt("purchase_description_id"));
+                deliveryOrders.add(deliveryOrder);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+            return deliveryOrders;
+        } catch (SQLException e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void insertDeliveryOrder(String orderDescription,
-                                    long providerId,
-                                    long staffId,
-                                    LocalDate placementDate,
-                                    LocalDate executionDate,
-                                    long purchaseDescriptionId) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.INSERT_DELIVERY_ORDER.s)) {
-            ps.setString(1, orderDescription);
-            ps.setLong(2, providerId);
-            ps.setLong(3, staffId);
-            ps.setDate(4, Date.valueOf(placementDate));
-            ps.setDate(5, Date.valueOf(executionDate));
-            ps.setLong(6, purchaseDescriptionId);
+    @Override
+    public DeliveryOrder getById(Long id) {
+        String selectAllDeliveryOrders = "SELECT * FROM delivery_orders WHERE delivery_order_id=?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(selectAllDeliveryOrders);
+            ps.setLong(1, id);
+            rs = ps.executeQuery();
+            boolean check = false;
+            DeliveryOrder deliveryOrder = new DeliveryOrder();
+            while(rs.next()) {
+                check = true;
+                deliveryOrder.setId(rs.getLong("delivery_order_id"));
+                deliveryOrder.setOrderDescription(rs.getString("order_description"));
+                deliveryOrder.setProviderId(rs.getLong("provider_id"));
+                deliveryOrder.setStaffId(rs.getLong("staff_id"));
+                deliveryOrder.setPlacementDate(rs.getDate("placement_date"));
+                deliveryOrder.setExecutionDate(rs.getDate("execution_date"));
+                deliveryOrder.setPurchaseId(rs.getInt("purchase_description_id"));
+            }
+            if(check) {
+                return deliveryOrder;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if (ps != null)
+                    ps.close();
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    @Override
+    public void add(DeliveryOrder deliveryOrder) {
+        String insertDeliveryOrder = "INSERT INTO delivery_orders (order_description, provider_id, staff_id, placement_date, execution_date, purchase_description_id) VALUES(?,?,?,?,?,?)";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(insertDeliveryOrder);
+            ps.setString(1, deliveryOrder.getOrderDescription());
+            ps.setLong(2, deliveryOrder.getProviderId());
+            ps.setLong(3, deliveryOrder.getStaffId());
+            ps.setDate(4, (Date) deliveryOrder.getPlacementDate());
+            ps.setDate(5, (Date) deliveryOrder.getExecutionDate());
+            ps.setLong(6, deliveryOrder.getPurchaseId());
             ps.executeUpdate();
             System.out.println("The delivery order inserted successfully!");
-        } catch(SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
-    public void updateDeliveryOrder(long id,
-                                    String orderDescription,
-                                    long providerId,
-                                    long staffId,
-                                    LocalDate placementDate,
-                                    LocalDate executionDate,
-                                    long purchaseDescriptionId) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.UPDATE_DELIVERY_ORDER.s)) {
-            ps.setString(1, orderDescription);
-            ps.setLong(2, providerId);
-            ps.setLong(3, staffId);
-            ps.setDate(4, Date.valueOf(placementDate));
-            ps.setDate(5, Date.valueOf(executionDate));
-            ps.setLong(6, purchaseDescriptionId);
-            ps.setLong(7, id);
-
+    @Override
+    public void update(DeliveryOrder deliveryOrder) {
+        String updateDeliveryOrder = "UPDATE delivery_orders SET order_description=?, provider_id=?, staff_id=?, placement_date=?, execution_date=?, purchase_description_id=? WHERE delivery_order_id=?";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(updateDeliveryOrder);
+            ps.setString(1, deliveryOrder.getOrderDescription());
+            ps.setLong(2, deliveryOrder.getProviderId());
+            ps.setLong(3, deliveryOrder.getStaffId());
+            ps.setDate(4, (Date) deliveryOrder.getPlacementDate());
+            ps.setDate(5, (Date) deliveryOrder.getExecutionDate());
+            ps.setLong(6, deliveryOrder.getPurchaseId());
+            ps.setLong(7, deliveryOrder.getId());
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated > 0) {
                 System.out.println("An existing delivery order was updated successfully!");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
-    public void deleteDeliveryOrder(long id) {
-        try(PreparedStatement ps = getDbConnection().prepareStatement(Statements.DELETE_DELIVERY_ORDER.s)) {
+    @Override
+    public void delete(Long id) {
+        String deleteClient = "DELETE FROM delivery_orders WHERE delivery_order_id=?";
+        PreparedStatement ps = null;
+        try {
+            connection = DBCPDataSource.getConnection();
+            ps = connection.prepareStatement(deleteClient);
             ps.setLong(1, id);
-
             int rowsDeleted = ps.executeUpdate();
-            if(rowsDeleted > 0) {
+            if (rowsDeleted > 0) {
                 System.out.println("A delivery order was deleted successfully!");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if(connection != null)
+                    connection.close();
+                if(ps != null)
+                    ps.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 }
