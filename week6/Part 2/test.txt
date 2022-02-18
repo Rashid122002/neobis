@@ -1,0 +1,164 @@
+GET http://localhost:8080/api/v1/clients
+Accept: application/json
+
+<> 2022-02-18T233517.200.json
+
+Testing started at 11:35 PM ...
+HTTP/1.1 200 
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Fri, 18 Feb 2022 17:35:17 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Response file saved.
+[
+  {
+    "clientId": 1,
+    "lastName": "Alex",
+    "firstName": "King",
+    "phoneNumber": "089809797457",
+    "notes": "jdfkhkghdsfjhgkdhs"
+  },
+  {
+    "clientId": 2,
+    "lastName": "Adilet",
+    "firstName": "Kuttubaev",
+    "phoneNumber": "98008583458",
+    "notes": "jhlgkdgfjhkdasgfkhjgf"
+  }
+]
+-------------------------------------------------
+
+###
+POST http://localhost:8080/api/v1/clients
+Content-Type: application/json
+
+{
+  "firstName": "Nazar",
+  "lastName": "Mamedov",
+  "phoneNumber": "0870987098",
+  "notes": "jkfhskdhflsahfdfj"
+}
+
+Response code: 200; Time: 272ms; Content length: 230 bytes
+HTTP/1.1 200 
+Content-Length: 0
+Date: Fri, 18 Feb 2022 17:35:17 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+<Response body is empty>
+
+-------------------------------------------------
+
+###
+GET http://localhost:8080/api/v1/clients
+Accept: application/json
+
+<> 2022-02-18T233517-1.200.json
+
+Response code: 200; Time: 56ms; Content length: 0 bytes
+HTTP/1.1 200 
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Fri, 18 Feb 2022 17:35:17 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Response file saved.
+[
+  {
+    "clientId": 1,
+    "lastName": "Alex",
+    "firstName": "King",
+    "phoneNumber": "089809797457",
+    "notes": "jdfkhkghdsfjhgkdhs"
+  },
+  {
+    "clientId": 2,
+    "lastName": "Adilet",
+    "firstName": "Kuttubaev",
+    "phoneNumber": "98008583458",
+    "notes": "jhlgkdgfjhkdasgfkhjgf"
+  },
+  {
+    "clientId": 3,
+    "lastName": "Mamedov",
+    "firstName": "Nazar",
+    "phoneNumber": "0870987098",
+    "notes": "jkfhskdhflsahfdfj"
+  }
+]
+-------------------------------------------
+
+###
+GET http://localhost:8080/api/v1/clients/2
+Accept: application/json
+
+<> 2022-02-18T233517-2.200.json
+
+Response code: 200; Time: 24ms; Content length: 341 bytes
+HTTP/1.1 200 
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Fri, 18 Feb 2022 17:35:17 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Response file saved.
+{
+  "clientId": 2,
+  "lastName": "Adilet",
+  "firstName": "Kuttubaev",
+  "phoneNumber": "98008583458",
+  "notes": "jhlgkdgfjhkdasgfkhjgf"
+}
+-------------------------------------------------
+
+###
+PUT http://localhost:8080/api/v1/clients/3
+Content-Type: application/json
+
+{
+  "firstName": "Rashid",
+  "lastName": "Jumabekov",
+  "phoneNumber": "0870987098",
+  "notes": "jkfhskdhflsahfdfj"
+}
+
+<> 2022-02-18T233517-3.200.json
+
+Response code: 200; Time: 16ms; Content length: 118 bytes
+HTTP/1.1 200 
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Fri, 18 Feb 2022 17:35:17 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Response file saved.
+{
+  "clientId": 3,
+  "lastName": "Jumabekov",
+  "firstName": "Rashid",
+  "phoneNumber": "0870987098",
+  "notes": "jkfhskdhflsahfdfj"
+}
+-------------------------------------------------
+
+###
+DELETE http://localhost:8080/api/v1/clients/1
+Accept: application/json
+
+Response code: 200; Time: 16ms; Content length: 113 bytes
+HTTP/1.1 200 
+Content-Length: 0
+Date: Fri, 18 Feb 2022 17:35:17 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+<Response body is empty>
+
+
+Response code: 200; Time: 40ms; Content length: 0 bytes
