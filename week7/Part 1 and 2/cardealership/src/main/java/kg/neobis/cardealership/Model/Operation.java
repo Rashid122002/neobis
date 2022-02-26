@@ -5,12 +5,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
 @Entity
 @Table(name = "operations")
 public class Operation {
@@ -18,7 +15,7 @@ public class Operation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "operation_id")
     private Long operationId;
-    @Column(name = "operation_date")
+    @Column(name = "operation_date", nullable = false)
     private LocalDate operationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,11 +34,11 @@ public class Operation {
     )
     private DeliveryOrder deliveryOrderId;
 
-    @Column(name = "operation_description")
+    @Column(name = "operation_description", nullable = false)
     private String operationDescription;
-    @Column(name = "factory_price")
+    @Column(name = "factory_price", nullable = false)
     private double factoryPrice;
-    @Column(name = "cost_up_to")
+    @Column(name = "cost_up_to", nullable = false)
     private double costUpTo;
     @Column(name = "total_amount")
     private double totalAmount;

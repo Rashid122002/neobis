@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(
         name = "orders",
@@ -36,15 +38,15 @@ public class Order {
     )
     private Car carId;
 
-    @Column(name = "placement_date")
+    @Column(name = "placement_date", nullable = false)
     private LocalDate placementDate;
-    @Column(name = "order_number")
+    @Column(name = "order_number", nullable = false)
     private String orderNumber;
-    @Column(name = "document_type")
+    @Column(name = "document_type", nullable = false)
     private String documentType;
-    @Column(name = "document_number")
+    @Column(name = "document_number", nullable = false)
     private String documentNumber;
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
     private String address;
 
     @ManyToOne(fetch = FetchType.LAZY)

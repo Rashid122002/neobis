@@ -5,12 +5,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
 @Entity
 @Table(name = "delivery_orders")
 public class DeliveryOrder {
@@ -37,9 +34,9 @@ public class DeliveryOrder {
     )
     private Staff staffId;
 
-    @Column(name = "placement_date")
+    @Column(name = "placement_date", nullable = false)
     private LocalDate placementDate;
-    @Column(name = "execution_date")
+    @Column(name = "execution_date", nullable = false)
     private LocalDate executionDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

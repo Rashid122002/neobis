@@ -8,7 +8,6 @@ alter table operations drop foreign key delivery_order_id_fk
 alter table orders drop foreign key car_id_fk2
 alter table orders drop foreign key client_id_fk
 alter table orders drop foreign key sale_id_fk
-*/
 drop table if exists cars;
 drop table if exists clients;
 drop table if exists delivery_orders;
@@ -19,11 +18,12 @@ drop table if exists providers;
 drop table if exists purchase_descriptions;
 drop table if exists sale_descriptions;
 drop table if exists staffs;
-create table cars (car_id bigint not null auto_increment, car_brand varchar(255), car_color varchar(255), engine_capacity varchar(255), notes varchar(255), serial_number varchar(255), year_of_manufacture date, price_id integer, primary key (car_id));
+*/
+create table cars (car_id bigint not null auto_increment, car_brand varchar(255) not null, car_color varchar(255) not null, engine_capacity varchar(255) not null, notes varchar(255), serial_number varchar(255) not null, year_of_manufacture date not null, price_id integer, primary key (car_id));
 create table clients (client_id bigint not null auto_increment, first_name varchar(255) not null, last_name varchar(255) not null, notes varchar(255), phone_number varchar(255) not null, primary key (client_id));
-create table delivery_orders (delivery_order_id bigint not null auto_increment, execution_date date, order_description varchar(255), placement_date date, provider_id bigint, purchase_id integer, staff_id bigint, primary key (delivery_order_id));
-create table operations (operation_id bigint not null auto_increment, cost_up_to double precision, factory_price double precision, operation_date date, operation_description varchar(255), total_amount double precision, car_id bigint, delivery_order_id bigint, primary key (operation_id));
-create table orders (order_id bigint not null auto_increment, address varchar(255), document_number varchar(255), document_type varchar(255), order_number varchar(255), placement_date date, car_id bigint, client_id bigint, sale_id integer, primary key (order_id));
+create table delivery_orders (delivery_order_id bigint not null auto_increment, execution_date date not null, order_description varchar(255), placement_date date not null, provider_id bigint, purchase_id integer, staff_id bigint, primary key (delivery_order_id));
+create table operations (operation_id bigint not null auto_increment, cost_up_to double precision not null, factory_price double precision not null, operation_date date not null, operation_description varchar(255) not null, total_amount double precision, car_id bigint, delivery_order_id bigint, primary key (operation_id));
+create table orders (order_id bigint not null auto_increment, address varchar(255) not null, document_number varchar(255) not null, document_type varchar(255) not null, order_number varchar(255) not null, placement_date date not null, car_id bigint, client_id bigint, sale_id integer, primary key (order_id));
 create table prices (price_id integer not null auto_increment, sale_price double precision not null, primary key (price_id));
 create table providers (provider_id bigint not null auto_increment, address varchar(255) not null, city varchar(255) not null, company_name varchar(255) not null, company_official_name varchar(255) not null, fax varchar(255) not null, payment_term varchar(255) not null, phone_number varchar(255) not null, position varchar(255) not null, primary key (provider_id));
 create table purchase_descriptions (purchase_id integer not null auto_increment, description varchar(255) not null, primary key (purchase_id));
