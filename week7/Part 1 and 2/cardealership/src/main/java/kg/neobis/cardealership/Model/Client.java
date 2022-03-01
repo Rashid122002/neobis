@@ -11,7 +11,8 @@ import javax.persistence.*;
 @Table(
         name = "clients",
         uniqueConstraints = {
-                @UniqueConstraint(name = "phone_number", columnNames = "phone_number")
+                @UniqueConstraint(name = "phone_number", columnNames = "phone_number"),
+                @UniqueConstraint(name = "email", columnNames = "email")
         }
 )
 public class Client {
@@ -25,6 +26,8 @@ public class Client {
     private String firstName;
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
+    @Column(name = "email", nullable = false)
+    private String email;
     @Column(name = "notes")
     private String notes;
 }

@@ -35,6 +35,7 @@ public class ClientService {
                     client.setFirstName(newClient.getFirstName());
                     client.setLastName(newClient.getLastName());
                     client.setPhoneNumber(newClient.getPhoneNumber());
+                    client.setEmail(newClient.getEmail());
                     client.setNotes(newClient.getNotes());
                     return clientRepository.save(client);
                 })
