@@ -1,7 +1,7 @@
-package com.neobis.week6.Config;
+package com.neobis.week6.config;
 
-import com.neobis.week6.Model.Client;
-import com.neobis.week6.Repository.ClientRepository;
+import com.neobis.week6.entity.Client;
+import com.neobis.week6.repository.ClientRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

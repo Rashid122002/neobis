@@ -1,32 +1,35 @@
-package com.neobis.week6.Model;
+package com.neobis.week6.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Objects;
+import com.neobis.week6.entity.Client;
 
-@Entity
-public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class ClientModel {
     private Long clientId;
     private String lastName;
     private String firstName;
     private String phoneNumber;
     private String notes;
 
-    public Client() {
+    public static ClientModel entityToModel(Client client) {
+        ClientModel clientModel = new ClientModel();
+        clientModel.setClientId(client.getClientId());
+        clientModel.setLastName(client.getLastName());
+        clientModel.setFirstName(client.getFirstName());
+        clientModel.setPhoneNumber(client.getPhoneNumber());
+        clientModel.setNotes(client.getNotes());
+        return clientModel;
     }
 
-    public Client(String lastName, String firstName, String phoneNumber, String notes) {
+    public ClientModel() {
+    }
+
+    public ClientModel(String lastName, String firstName, String phoneNumber, String notes) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.phoneNumber = phoneNumber;
         this.notes = notes;
     }
 
-    public Client(Long clientId, String lastName, String firstName, String phoneNumber, String notes) {
+    public ClientModel(Long clientId, String lastName, String firstName, String phoneNumber, String notes) {
         this.clientId = clientId;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -75,21 +78,8 @@ public class Client {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return clientId == client.clientId && Objects.equals(lastName, client.lastName) && Objects.equals(firstName, client.firstName) && Objects.equals(phoneNumber, client.phoneNumber) && Objects.equals(notes, client.notes);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(clientId, lastName, firstName, phoneNumber, notes);
-    }
-
-    @Override
     public String toString() {
-        return "Client{" +
+        return "ClientModel{" +
                 "clientId=" + clientId +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +

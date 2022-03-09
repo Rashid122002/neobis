@@ -1,4 +1,4 @@
-package com.neobis.week6.Exceptions;
+package com.neobis.week6.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,7 +11,7 @@ public class ClientNotFoundAdvice {
     @ResponseBody
     @ExceptionHandler(ClientNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String employeeNotFoundHandler(ClientNotFoundException ex) {
+    String clientNotFoundHandler(ClientNotFoundException ex) {
         return ex.getMessage();
     }
 }
