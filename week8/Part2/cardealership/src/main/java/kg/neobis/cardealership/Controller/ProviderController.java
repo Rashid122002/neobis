@@ -1,44 +1,80 @@
-package kg.neobis.cardealership.Controller;
+package kg.neobis.cardealership.controller;
 
-import kg.neobis.cardealership.Model.Provider;
-import kg.neobis.cardealership.Service.ProviderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import kg.neobis.cardealership.entity.Provider;
+import kg.neobis.cardealership.exception.EntityNotFoundException;
+import kg.neobis.cardealership.model.ProviderModel;
+import kg.neobis.cardealership.service.ProviderService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/providers")
 public class ProviderController {
     private final ProviderService providerService;
 
-    @Autowired
     public ProviderController(ProviderService providerService) {
         this.providerService = providerService;
     }
 
     @GetMapping
-    public List<Provider> getProviders() {
-        return providerService.all();
+    public ResponseEntity<?> getProviders() {
+        try{
+            return ResponseEntity.ok(providerService.getAll());
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public Provider getProviderById(@PathVariable Long id) {
-        return providerService.getProviderById(id);
+    public ResponseEntity<?> getProviderById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(providerService.getById(id));
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public void registerNewProvider(@RequestBody Provider newProvider) {
-        providerService.addNewProvider(newProvider);
+    public ResponseEntity<?> addNewProvider(@RequestBody Provider newProvider) {
+        try {
+            providerService.add(newProvider);
+            return ResponseEntity.ok("Provider was added successfully");
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public Provider replaceProvider(@RequestBody Provider newProvider, @PathVariable Long id) {
-        return providerService.replaceProvider(newProvider, id);
+    public ResponseEntity<?> replaceProvider(@RequestBody ProviderModel providerModel, @PathVariable Long id) {
+        try{
+            return ResponseEntity.ok(providerService.update(providerModel, id));
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSProvider(@PathVariable Long id) {
-        providerService.deleteProviderById(id);
+    public ResponseEntity<?> deleteProvider(@PathVariable Long id) {
+        try {
+            providerService.delete(id);
+            return ResponseEntity.ok("Deleted provider with id = " + id);
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

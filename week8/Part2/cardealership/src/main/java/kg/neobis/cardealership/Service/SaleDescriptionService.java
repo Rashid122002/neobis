@@ -1,51 +1,65 @@
-package kg.neobis.cardealership.Service;
+package kg.neobis.cardealership.service;
 
-import kg.neobis.cardealership.Exception.EntityNotFoundException;
-import kg.neobis.cardealership.Model.SaleDescription;
-import kg.neobis.cardealership.Repository.SaleDescriptionRepository;
+import kg.neobis.cardealership.exception.EntityNotFoundException;
+import kg.neobis.cardealership.entity.SaleDescription;
+import kg.neobis.cardealership.model.SaleDescriptionModel;
+import kg.neobis.cardealership.repository.SaleDescriptionRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static kg.neobis.cardealership.model.SaleDescriptionModel.saleDescriptionModelToSaleDescriptionModelModeL;
+
 @Service
-public class SaleDescriptionService {
+public class SaleDescriptionService implements DAO<SaleDescription, SaleDescriptionModel, Integer> {
     private SaleDescriptionRepository saleDescriptionRepository;
 
     public SaleDescriptionService(SaleDescriptionRepository saleDescriptionRepository) {
         this.saleDescriptionRepository = saleDescriptionRepository;
     }
 
-    public List<SaleDescription> all() {
-        return saleDescriptionRepository.findAll();
+    @Override
+    public List<SaleDescriptionModel> entityListToModelList(Iterable<SaleDescription> saleDescriptions) {
+        List<SaleDescriptionModel> saleDescriptionModelModelList = new ArrayList<SaleDescriptionModel>();
+        for (SaleDescription saleDescription : saleDescriptions)
+        {
+            saleDescriptionModelModelList.add(saleDescriptionModelToSaleDescriptionModelModeL(saleDescription));
+        }
+        return saleDescriptionModelModelList;
     }
 
-    public SaleDescription getSaleDescriptionById(Integer id) {
-        return saleDescriptionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Could not find sale description ", id));
+    @Override
+    public List<SaleDescriptionModel> getAll() {
+        return entityListToModelList(saleDescriptionRepository.findAll());
     }
 
-    public void addNewSaleDescription(@RequestBody SaleDescription newSaleDescription) {
-        saleDescriptionRepository.save(newSaleDescription);
+    @Override
+    public SaleDescriptionModel getById(Integer id) throws EntityNotFoundException {
+        SaleDescription saleDescription = saleDescriptionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found sale description: ", id));
+        return saleDescriptionModelToSaleDescriptionModelModeL(saleDescription);
     }
 
-    public SaleDescription replaceSaleDescription(@RequestBody SaleDescription newSaleDescription, @PathVariable Integer id) {
-        return saleDescriptionRepository.findById(id)
-                .map(saleDescription -> {
-                    saleDescription.setDescription(newSaleDescription.getDescription());
-                    return saleDescriptionRepository.save(saleDescription);
-                })
-                .orElseGet(() -> {
-                    newSaleDescription.setSaleId(id);
-                    return saleDescriptionRepository.save(newSaleDescription);
-                });
+    @Override
+    public void add(SaleDescription saleDescription) {
+        saleDescriptionRepository.save(saleDescription);
     }
 
-    public void deleteSaleDescriptionById(@PathVariable Integer id) {
-        boolean exists = saleDescriptionRepository.existsById(id);
-        if(!exists){
-            throw new EntityNotFoundException("Could not find sale description ", id);
+    @Override
+    public SaleDescription update(SaleDescriptionModel saleDescriptionModel, Integer id) throws EntityNotFoundException {
+        SaleDescription saleDescription = saleDescriptionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found sale description: ", id));
+        saleDescription.setDescription(saleDescriptionModel.getDescription());
+        return saleDescriptionRepository.save(saleDescription);
+    }
+
+    @Override
+    public Integer delete(Integer id) throws EntityNotFoundException {
+        if(!saleDescriptionRepository.existsById(id)) {
+            throw new EntityNotFoundException("Could not found sale description: ", id);
         }
         saleDescriptionRepository.deleteById(id);
+        return id;
     }
 }

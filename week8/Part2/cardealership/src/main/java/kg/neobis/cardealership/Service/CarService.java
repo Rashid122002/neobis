@@ -1,57 +1,71 @@
-package kg.neobis.cardealership.Service;
+package kg.neobis.cardealership.service;
 
-import kg.neobis.cardealership.Exception.EntityNotFoundException;
-import kg.neobis.cardealership.Model.Car;
-import kg.neobis.cardealership.Repository.CarRepository;
+import kg.neobis.cardealership.exception.EntityNotFoundException;
+import kg.neobis.cardealership.entity.Car;
+import kg.neobis.cardealership.model.CarModel;
+import kg.neobis.cardealership.repository.CarRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static kg.neobis.cardealership.model.CarModel.carToCarModel;
+
 @Service
-public class CarService {
+public class CarService implements DAO<Car, CarModel, Long>  {
     private CarRepository carRepository;
 
     public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
 
-    public List<Car> all() {
-        return carRepository.findAll();
+    @Override
+    public List<CarModel> entityListToModelList(Iterable<Car> cars) {
+        List<CarModel> carModelList = new ArrayList<CarModel>();
+        for (Car car : cars)
+        {
+            carModelList.add(carToCarModel(car));
+        }
+        return carModelList;
     }
 
-    public Car getCarById(Long id) {
-        return carRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Could not find car ", id));
+    @Override
+    public List<CarModel> getAll() {
+        return entityListToModelList(carRepository.findAll());
     }
 
-    public void addNewCar(@RequestBody Car newCar) {
-        carRepository.save(newCar);
+    @Override
+    public CarModel getById(Long id) throws EntityNotFoundException {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found car: ", id));
+        return carToCarModel(car);
     }
 
-    public Car replaceCar(@RequestBody Car newCar, @PathVariable Long id) {
-        return carRepository.findById(id)
-                .map(car -> {
-                    car.setCarBrand(newCar.getCarBrand());
-                    car.setSerialNumber(newCar.getSerialNumber());
-                    car.setYearOfManufacture(newCar.getYearOfManufacture());
-                    car.setEngineCapacity(newCar.getEngineCapacity());
-                    car.setCarColor(newCar.getCarColor());
-                    car.setPriceId(newCar.getPriceId());
-                    car.setNotes(newCar.getNotes());
-                    return carRepository.save(car);
-                })
-                .orElseGet(() -> {
-                    newCar.setCarId(id);
-                    return carRepository.save(newCar);
-                });
+    @Override
+    public void add(Car car) {
+        carRepository.save(car);
     }
 
-    public void deleteCarById(@PathVariable Long id) {
-        boolean exists = carRepository.existsById(id);
-        if(!exists){
-            throw new EntityNotFoundException("Could not find car ", id);
+    @Override
+    public Car update(CarModel carModel, Long id) throws EntityNotFoundException {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found car: ", id));
+        car.setCarBrand(carModel.getCarBrand());
+        car.setSerialNumber(carModel.getSerialNumber());
+        car.setYearOfManufacture(carModel.getYearOfManufacture());
+        car.setEngineCapacity(carModel.getEngineCapacity());
+        car.setCarColor(carModel.getCarColor());
+        car.setPriceId(carModel.getPriceId());
+        car.setNotes(carModel.getNotes());
+        return carRepository.save(car);
+    }
+
+    @Override
+    public Long delete(Long id) throws EntityNotFoundException {
+        if(!carRepository.existsById(id)) {
+            throw new EntityNotFoundException("Could not found car: ", id);
         }
         carRepository.deleteById(id);
+        return id;
     }
 }

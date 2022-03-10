@@ -1,7 +1,7 @@
 package kg.neobis.cardealership.repository;
 
-import kg.neobis.cardealership.entity.Car;
+import kg.neobis.cardealership.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CarRepository extends JpaRepository<Car, Long> {
+public interface RoleRepository extends JpaRepository<Role, Long> {
 }

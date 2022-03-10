@@ -1,57 +1,71 @@
-package kg.neobis.cardealership.Service;
+package kg.neobis.cardealership.service;
 
-import kg.neobis.cardealership.Exception.EntityNotFoundException;
-import kg.neobis.cardealership.Model.Operation;
-import kg.neobis.cardealership.Repository.OperationRepository;
+import kg.neobis.cardealership.exception.EntityNotFoundException;
+import kg.neobis.cardealership.entity.Operation;
+import kg.neobis.cardealership.model.OperationModel;
+import kg.neobis.cardealership.repository.OperationRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static kg.neobis.cardealership.model.OperationModel.operationToOperationModel;
+
 @Service
-public class OperationService {
+public class OperationService implements DAO<Operation, OperationModel, Long> {
     private OperationRepository operationRepository;
 
     public OperationService(OperationRepository operationRepository) {
         this.operationRepository = operationRepository;
     }
 
-    public List<Operation> all() {
-        return operationRepository.findAll();
+    @Override
+    public List<OperationModel> entityListToModelList(Iterable<Operation> operations) {
+        List<OperationModel> operationModelList = new ArrayList<OperationModel>();
+        for (Operation operation : operations)
+        {
+            operationModelList.add(operationToOperationModel(operation));
+        }
+        return operationModelList;
     }
 
-    public Operation getOperationById(Long id) {
-        return operationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Could not find operation ", id));
+    @Override
+    public List<OperationModel> getAll() {
+        return entityListToModelList(operationRepository.findAll());
     }
 
-    public void addNewOperation(@RequestBody Operation newOperation) {
-        operationRepository.save(newOperation);
+    @Override
+    public OperationModel getById(Long id) throws EntityNotFoundException {
+        Operation operation = operationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found operation: ", id));
+        return operationToOperationModel(operation);
     }
 
-    public Operation replaceOperation(@RequestBody Operation newOperation, @PathVariable Long id) {
-        return operationRepository.findById(id)
-                .map(operation -> {
-                    operation.setOperationDate(newOperation.getOperationDate());
-                    operation.setCarId(newOperation.getCarId());
-                    operation.setDeliveryOrderId(newOperation.getDeliveryOrderId());
-                    operation.setOperationDescription(newOperation.getOperationDescription());
-                    operation.setFactoryPrice(newOperation.getFactoryPrice());
-                    operation.setCostUpTo(newOperation.getCostUpTo());
-                    operation.setTotalAmount(newOperation.getTotalAmount());
-                    return operationRepository.save(operation);
-                })
-                .orElseGet(() -> {
-                    newOperation.setOperationId(id);
-                    return operationRepository.save(newOperation);
-                });
+    @Override
+    public void add(Operation operation) {
+        operationRepository.save(operation);
     }
 
-    public void deleteOperation(@PathVariable Long id) {
-        boolean exists = operationRepository.existsById(id);
-        if(!exists){
-            throw new EntityNotFoundException("Could not find operation ", id);
+    @Override
+    public Operation update(OperationModel operationModel, Long id) throws EntityNotFoundException {
+        Operation operation = operationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found operation: ", id));
+        operation.setOperationDate(operation.getOperationDate());
+        operation.setCarId(operationModel.getCarId());
+        operation.setDeliveryOrderId(operationModel.getDeliveryOrderId());
+        operation.setOperationDescription(operationModel.getOperationDescription());
+        operation.setFactoryPrice(operationModel.getFactoryPrice());
+        operation.setCostUpTo(operationModel.getCostUpTo());
+        operation.setTotalAmount(operationModel.getTotalAmount());
+        return operationRepository.save(operation);
+    }
+
+    @Override
+    public Long delete(Long id) throws EntityNotFoundException {
+        if(!operationRepository.existsById(id)) {
+            throw new EntityNotFoundException("Could not found operation: ", id);
         }
         operationRepository.deleteById(id);
+        return id;
     }
 }

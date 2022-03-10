@@ -1,44 +1,80 @@
-package kg.neobis.cardealership.Controller;
+package kg.neobis.cardealership.controller;
 
-import kg.neobis.cardealership.Model.Operation;
-import kg.neobis.cardealership.Service.OperationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import kg.neobis.cardealership.entity.Operation;
+import kg.neobis.cardealership.exception.EntityNotFoundException;
+import kg.neobis.cardealership.model.OperationModel;
+import kg.neobis.cardealership.service.OperationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/operations")
 public class OperationController {
     private final OperationService operationService;
 
-    @Autowired
     public OperationController(OperationService operationService) {
         this.operationService = operationService;
     }
 
     @GetMapping
-    public List<Operation> getOperations() {
-        return operationService.all();
+    public ResponseEntity<?> getOperations() {
+        try{
+            return ResponseEntity.ok(operationService.getAll());
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public Operation getOperationById(@PathVariable Long id) {
-        return operationService.getOperationById(id);
+    public ResponseEntity<?> getOperationById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(operationService.getById(id));
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public void registerNewOperation(@RequestBody Operation newOperation) {
-        operationService.addNewOperation(newOperation);
+    public ResponseEntity<?> addNewOperation(@RequestBody Operation newOperation) {
+        try {
+            operationService.add(newOperation);
+            return ResponseEntity.ok("Operation was added successfully");
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public Operation replaceOperation(@RequestBody Operation newOperation, @PathVariable Long id) {
-        return operationService.replaceOperation(newOperation, id);
+    public ResponseEntity<?> replaceOperation(@RequestBody OperationModel operationModel, @PathVariable Long id) {
+        try{
+            return ResponseEntity.ok(operationService.update(operationModel, id));
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteOperation(@PathVariable Long id) {
-        operationService.deleteOperation(id);
+    public ResponseEntity<?> deleteOperation(@PathVariable Long id) {
+        try {
+            operationService.delete(id);
+            return ResponseEntity.ok("Deleted operation with id = " + id);
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

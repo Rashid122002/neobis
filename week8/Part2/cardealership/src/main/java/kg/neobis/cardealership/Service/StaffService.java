@@ -1,54 +1,70 @@
-package kg.neobis.cardealership.Service;
+package kg.neobis.cardealership.service;
 
-import kg.neobis.cardealership.Exception.EntityNotFoundException;
-import kg.neobis.cardealership.Model.Staff;
-import kg.neobis.cardealership.Repository.StaffRepository;
+import kg.neobis.cardealership.entity.Car;
+import kg.neobis.cardealership.exception.EntityNotFoundException;
+import kg.neobis.cardealership.entity.Staff;
+import kg.neobis.cardealership.model.StaffModel;
+import kg.neobis.cardealership.repository.StaffRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static kg.neobis.cardealership.model.StaffModel.staffToStaffModel;
+
 @Service
-public class StaffService {
+public class StaffService implements DAO<Staff, StaffModel, Long>  {
     private StaffRepository staffRepository;
 
     public StaffService(StaffRepository staffRepository) {
         this.staffRepository = staffRepository;
     }
 
-    public List<Staff> all() {
-        return staffRepository.findAll();
+    @Override
+    public List<StaffModel> entityListToModelList(Iterable<Staff> staff) {
+        List<StaffModel> staffModelList = new ArrayList<StaffModel>();
+        for(Staff staff1 : staff) {
+            staffModelList.add(staffToStaffModel(staff1));
+        }
+        return staffModelList;
     }
 
-    public Staff getStaffById(Long id) {
-        return staffRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Could not find staff ", id));
+    @Override
+    public List<StaffModel> getAll() {
+        return entityListToModelList(staffRepository.findAll());
     }
 
-    public void addNewStaff(@RequestBody Staff newStaff) {
-        staffRepository.save(newStaff);
+    @Override
+    public StaffModel getById(Long id) throws EntityNotFoundException {
+        Staff staff = staffRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found staff: ", id));
+        return staffToStaffModel(staff);
     }
 
-    public Staff replaceStaff(@RequestBody Staff newStaff, @PathVariable Long id) {
-        return staffRepository.findById(id)
-                .map(staff -> {
-                    staff.setLastName(newStaff.getLastName());
-                    staff.setFirstName(newStaff.getFirstName());
-                    staff.setPosition(newStaff.getPosition());
-                    staff.setPhoneNumber(newStaff.getPhoneNumber());
-                    return staffRepository.save(staff);
-                })
-                .orElseGet(() -> {
-                    newStaff.setStaffId(id);
-                    return staffRepository.save(newStaff);
-                });
+    @Override
+    public void add(Staff staff) {
+        staffRepository.save(staff);
     }
 
-    public void deleteStaffById(@PathVariable Long id) {
-        boolean exists = staffRepository.existsById(id);
-        if(!exists){
-            throw new EntityNotFoundException("Could not find staff ", id);
+    @Override
+    public Staff update(StaffModel staffModel, Long id) throws EntityNotFoundException {
+        Staff staff = staffRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found staff: ", id));
+        staff.setLastName(staffModel.getLastName());
+        staff.setFirstName(staffModel.getFirstName());
+        staff.setPosition(staffModel.getPosition());
+        staff.setPhoneNumber(staffModel.getPhoneNumber());
+        return staffRepository.save(staff);
+    }
+
+    @Override
+    public Long delete(Long id) throws EntityNotFoundException {
+        if(!staffRepository.existsById(id)) {
+            throw new EntityNotFoundException("Could not found staff: ", id);
         }
         staffRepository.deleteById(id);
+        return id;
     }
 }

@@ -1,44 +1,80 @@
-package kg.neobis.cardealership.Controller;
+package kg.neobis.cardealership.controller;
 
-import kg.neobis.cardealership.Model.PurchaseDescription;
-import kg.neobis.cardealership.Service.PurchaseDescriptionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import kg.neobis.cardealership.entity.PurchaseDescription;
+import kg.neobis.cardealership.exception.EntityNotFoundException;
+import kg.neobis.cardealership.model.PurchaseDescriptionModel;
+import kg.neobis.cardealership.service.PurchaseDescriptionService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/purchasedescriptions")
 public class PurchaseDescriptionController {
     private final PurchaseDescriptionService purchaseDescriptionService;
 
-    @Autowired
     public PurchaseDescriptionController(PurchaseDescriptionService purchaseDescriptionService) {
         this.purchaseDescriptionService = purchaseDescriptionService;
     }
 
     @GetMapping
-    public List<PurchaseDescription> getPurchaseDescriptions() {
-        return purchaseDescriptionService.all();
+    public ResponseEntity<?> getPurchaseDescriptions() {
+        try{
+            return ResponseEntity.ok(purchaseDescriptionService.getAll());
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public PurchaseDescription getPurchaseDescriptionById(@PathVariable Integer id) {
-        return purchaseDescriptionService.getPurchaseDescriptionById(id);
+    public ResponseEntity<?> getPurchaseDescriptionById(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(purchaseDescriptionService.getById(id));
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public void registerNewPurchaseDescription(@RequestBody PurchaseDescription newPurchaseDescription) {
-        purchaseDescriptionService.addNewPurchaseDescription(newPurchaseDescription);
+    public ResponseEntity<?> addNewPurchaseDescription(@RequestBody PurchaseDescription newPurchaseDescription) {
+        try {
+            purchaseDescriptionService.add(newPurchaseDescription);
+            return ResponseEntity.ok("PurchaseDescription was added successfully");
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public PurchaseDescription replacePurchaseDescription(@RequestBody PurchaseDescription newPurchaseDescription, @PathVariable Integer id) {
-        return purchaseDescriptionService.replacePurchaseDescription(newPurchaseDescription, id);
+    public ResponseEntity<?> replacePurchaseDescription(@RequestBody PurchaseDescriptionModel purchaseDescriptionModel, @PathVariable Integer id) {
+        try{
+            return ResponseEntity.ok(purchaseDescriptionService.update(purchaseDescriptionModel, id));
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deletePurchaseDescription(@PathVariable Integer id) {
-        purchaseDescriptionService.deletePurchaseDescriptionById(id);
+    public ResponseEntity<?> deletePurchaseDescription(@PathVariable Integer id) {
+        try {
+            purchaseDescriptionService.delete(id);
+            return ResponseEntity.ok("Deleted purchase description with id = " + id);
+        } catch (EntityNotFoundException cnfe) {
+            return new ResponseEntity(cnfe.getMessage(), cnfe.getNOT_FOUND_STATUS());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

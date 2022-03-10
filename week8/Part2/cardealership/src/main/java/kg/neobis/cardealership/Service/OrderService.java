@@ -1,58 +1,72 @@
-package kg.neobis.cardealership.Service;
+package kg.neobis.cardealership.service;
 
-import kg.neobis.cardealership.Exception.EntityNotFoundException;
-import kg.neobis.cardealership.Model.Order;
-import kg.neobis.cardealership.Repository.OrderRepository;
+import kg.neobis.cardealership.exception.EntityNotFoundException;
+import kg.neobis.cardealership.entity.Order;
+import kg.neobis.cardealership.model.OrderModel;
+import kg.neobis.cardealership.repository.OrderRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static kg.neobis.cardealership.model.OrderModel.orderToOrderModel;
+
 @Service
-public class OrderService {
+public class OrderService implements DAO<Order, OrderModel, Long>  {
     private OrderRepository orderRepository;
 
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
-    public List<Order> all() {
-        return orderRepository.findAll();
+    @Override
+    public List<OrderModel> entityListToModelList(Iterable<Order> orders) {
+        List<OrderModel> orderModelList = new ArrayList<OrderModel>();
+        for (Order order : orders)
+        {
+            orderModelList.add(orderToOrderModel(order));
+        }
+        return orderModelList;
     }
 
-    public Order getOrderById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Could not find order ", id));
+    @Override
+    public List<OrderModel> getAll() {
+        return entityListToModelList(orderRepository.findAll());
     }
 
-    public void addNewOrder(@RequestBody Order newOrder) {
-        orderRepository.save(newOrder);
+    @Override
+    public OrderModel getById(Long id) throws EntityNotFoundException {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found order: ", id));
+        return orderToOrderModel(order);
     }
 
-    public Order replaceOrder(@RequestBody Order newOrder, @PathVariable Long id) {
-        return orderRepository.findById(id)
-                .map(order -> {
-                    order.setClientId(newOrder.getClientId());
-                    order.setCarId(newOrder.getCarId());
-                    order.setPlacementDate(newOrder.getPlacementDate());
-                    order.setOrderNumber(newOrder.getOrderNumber());
-                    order.setDocumentType(newOrder.getDocumentType());
-                    order.setDocumentNumber(newOrder.getDocumentNumber());
-                    order.setAddress(newOrder.getAddress());
-                    order.setSaleId(newOrder.getSaleId());
-                    return orderRepository.save(order);
-                })
-                .orElseGet(() -> {
-                    newOrder.setOrderId(id);
-                    return orderRepository.save(newOrder);
-                });
+    @Override
+    public void add(Order order) {
+        orderRepository.save(order);
     }
 
-    public void deleteOrderById(@PathVariable Long id) {
-        boolean exists = orderRepository.existsById(id);
-        if(!exists){
-            throw new EntityNotFoundException("Could not find order ", id);
+    @Override
+    public Order update(OrderModel orderModel, Long id) throws EntityNotFoundException {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not found order: ", id));
+        order.setUserId(orderModel.getUserId());
+        order.setCarId(orderModel.getCarId());
+        order.setPlacementDate(orderModel.getPlacementDate());
+        order.setOrderNumber(orderModel.getOrderNumber());
+        order.setDocumentType(orderModel.getDocumentType());
+        order.setDocumentNumber(orderModel.getDocumentNumber());
+        order.setAddress(orderModel.getAddress());
+        order.setSaleId(orderModel.getSaleId());
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public Long delete(Long id) throws EntityNotFoundException {
+        if(!orderRepository.existsById(id)) {
+            throw new EntityNotFoundException("Could not found order: ", id);
         }
         orderRepository.deleteById(id);
+        return id;
     }
 }
