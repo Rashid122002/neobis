@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Admin Page</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+</head>
+<body>
+<h1>For Admin Page</h1>
+<div>
+    <table border="1">
+        <thead>
+        <tr>
+            <th> Id </th>
+            <th> Username </th>
+            <th> Password </th>
+            <th> Roles </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${allUsers.empty}">
+            <td colspan="2"> No Users Available </td>
+        </tr>
+        <tr th:each="user : ${allUsers}">
+            <td><span th:text="${user.id}"> Id </span></td>
+            <td><span th:text="${user.username}"> Username </span></td>
+            <td><span th:text="${user.password}"> Password </span></td>
+            <td th:each="role: ${user.roles}">
+                <span th:text="${role.name}"> Roles </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br><a th:href="@{/}">Index Page</a> <br><br>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="logout">
+</form>
+</body>
+</html>

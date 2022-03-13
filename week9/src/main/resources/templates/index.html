@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Index Page</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+</head>
+<body>
+<h1>Index Page</h1>
+
+<p th:text="${user}"></p>
+
+<a th:href="@{/login}">Login page</a> <br>
+<a th:href="@{/registration}">Registration page</a> <br>
+<a th:href="@{/foruser}">For User</a> <br>
+<a th:if="${user != 'Welcome, anonymous'}" th:href="@{/foradmin}">For Admin</a> <br><br>
+
+<form th:if="${user != 'Welcome, anonymous'}" th:action="@{/logout}" method="post">
+  <input type="submit" value="logout">
+</form>
+</body>
+</html>
