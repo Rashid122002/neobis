@@ -47,7 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .logoutSuccessUrl("/")
                 .and()
-                    .rememberMe();
-
+                    .rememberMe()
+                    .key("secretkey")
+        ;
     }
 }
