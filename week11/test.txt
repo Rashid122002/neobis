@@ -1,0 +1,30 @@
+###
+GET http://localhost:8080/api/v1/registration
+Body:
+{
+    "username":"root",
+    "password":"12345"
+}
+Output:
+User registered successfully
+
+###
+POST http://localhost:8080/api/v1/auth
+Body:
+{
+    "username":"root",
+    "password":"12345"
+}
+Output:
+{
+    "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290IiwiZXhwIjoxNjQ5NjM1MjAwfQ.FaKgBnFBkcuqJqPupfNhUTkQt1AoI-IRS1dOVhO7Ba_QH_HxGPUcQMDub1Zwskz6Ttzo3evDOhJ8RhP-5qePPA"
+}
+
+###
+GET http://localhost:8080/api/v1/user
+Authorization:
+    Type: Bearer Token
+    Token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290IiwiZXhwIjoxNjQ5NjM1MjAwfQ.FaKgBnFBkcuqJqPupfNhUTkQt1AoI-IRS1dOVhO7Ba_QH_HxGPUcQMDub1Zwskz6Ttzo3evDOhJ8RhP-5qePPA
+Body: none
+Output:
+Congratulations! It works! This is User Page!
